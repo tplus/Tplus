@@ -1,0 +1,8 @@
+[
+    {"dayOfWeek": 1, "comment": "Beijing Office Tour"},
+    {"dayOfWeek": 2, "comment": "Xi'an Office Tour"},
+    {"dayOfWeek": 3, "comment": "Chengdu Office Tour"},
+    {"dayOfWeek": 4, "comment": "Chicago Office Tour"},
+    {"dayOfWeek": 5, "comment": "Sydney Office Tour"},
+    {"dayOfWeek": 6, "comment": "San Francisco Office Tour"}
+]
