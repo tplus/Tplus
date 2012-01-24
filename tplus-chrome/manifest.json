@@ -1,0 +1,19 @@
+{
+    "name":"TPlus Chrome Extension",
+    "version":"1.0",
+    "description":"Chrome extension of TPlus",
+    "browser_action":{
+        "default_icon":"tplus.png"
+    },
+    "permissions":[
+        "http://*/",
+        "https://*/"
+    ],
+    "content_scripts":[
+        {
+            "matches":["https://te.thoughtworks.com/time_sheets/new"],
+            "css":["tplus.css"],
+            "js":["jquery-1.7.1.min.js", "tplus.js"]
+        }
+    ]
+}
