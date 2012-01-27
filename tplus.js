@@ -1,15 +1,6 @@
 (function() {
     function search(name, startDate) {
-        var data = [
-            {dayOfWeek: 1, comment: '#1, #11'},
-            {dayOfWeek: 2, comment: '#2'},
-            {dayOfWeek: 3, comment: '#3'},
-            {dayOfWeek: 4, comment: '#4'},
-            {dayOfWeek: 5, comment: '#5'},
-            {dayOfWeek: 6, comment: '#6'},
-            {dayOfWeek: 7, comment: '#7'}
-        ];
-        return data;
+       return new TplusFinder().search(name, endDate);
     }
 
     function render(data, startDate, endDate) {
