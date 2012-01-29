@@ -3,7 +3,7 @@
         DEFAULT_ACTIVITY_CODE = 'PWC0001 TIGER MISC',
         DEFAULT_DAILY_WORKING_HOURS = 8,
         MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        SEARCH_API_URL = 'http://10.18.8.202:1911';
+        DEFAULT_REPOSITORY_URL = 'http://10.18.8.31:1911';
 
     function noOp() {
     }
@@ -107,13 +107,11 @@
 
     function searchAndFill(queryOption) {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", SEARCH_API_URL, true);
+        xhr.open("GET", queryOption.repositoryUrl || DEFAULT_REPOSITORY_URL, true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
                 var data = xhr.responseText;
-                console.log(data);
                 var logEntries = new LogRepository(data).search(queryOption.initials, queryOption.endDate);
-                console.log(logEntries);
                 setEndDate(formatToTEDateString(new Date(queryOption.endDate)));
                 setExpenseStatus(false);
                 fillTimeReport(logEntries);
