@@ -1,6 +1,6 @@
 (function() {
     function search(name, startDate) {
-       return new TplusFinder().search(name, endDate);
+       return new LogRepository('').search(name, endDate);
     }
 
     function render(data, startDate, endDate) {

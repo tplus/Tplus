@@ -1,12 +1,13 @@
 {
-  "name": "T+",
-  "version": "1.0",
-  "description": "Make our timesheet safe and quick.",
-  "browser_action": {
-    "default_icon": "icon.png",
-     "popup": "main.html"
-  },
-  "permissions": [
-    "http://www.baidu.com/"
-  ]
+    "name": "T+",
+    "version": "1.0",
+    "description": "Make our timesheet safe and quick.",
+    "browser_action": {
+        "default_icon": "icon.png",
+        "popup": "main.html"
+    },
+    "permissions":[
+        "http://*/",
+        "https://*/"
+    ]
 }

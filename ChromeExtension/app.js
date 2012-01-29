@@ -9,11 +9,8 @@ function getResponse(url, callback) {
     xhr.send();
 }
 
-function showHtml(s){
-   $(".htmlDom").html(s);
-}
 
-getResponse("http://www.baidu.com",showHtml);
+getResponse("http://10.18.8.31:1911",showHtml);
 
 
 
