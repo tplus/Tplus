@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript">
+        function onRequest(request, sender) {
+            window['queryOption'] = request;
+            window['tab'] = sender.tab.id;
+            chrome.pageAction.show(sender.tab.id);
+        }
+        chrome.extension.onRequest.addListener(onRequest);
+    </script>
+</head>
+</html>
