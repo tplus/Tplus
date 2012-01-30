@@ -1,5 +1,6 @@
 (function () {
     var BREATHE_DELAY = 200,
+        DEFAULT_COUNTRY_ABBREVIATION = 'CHN',
         DEFAULT_ACTIVITY_CODE = 'PWC0001 TIGER MISC',
         DEFAULT_DAILY_WORKING_HOURS = 8,
         MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -10,7 +11,12 @@
 
     function fillTimeReport(timeRecords, currentIndex) {
         currentIndex = currentIndex || 0;
-        if (currentIndex === timeRecords.length) return;
+        if (currentIndex === timeRecords.length) {
+            while(currentIndex < getExistingTimeRecordRowCount()) {
+                clearTimeRecordFields(currentIndex++);
+            }
+            return;
+        }
         if (getExistingTimeRecordRowCount() <= currentIndex) {
             addNewRowInTableAndThen(function () {
                 fillTimeRecordAndContinue(timeRecords, currentIndex);
@@ -62,10 +68,23 @@
     }
 
     function setTimeRecordFields(timeRecords, rowIndex) {
+        setCountry(rowIndex, DEFAULT_COUNTRY_ABBREVIATION)
         setActivity(rowIndex, DEFAULT_ACTIVITY_CODE);
         setBillableStatus(rowIndex, true);
         setComment(rowIndex, timeRecords[rowIndex].comment);
         setWorkingHours(rowIndex, timeRecords[rowIndex].dayOfWeek, DEFAULT_DAILY_WORKING_HOURS);
+    }
+
+    function clearTimeRecordFields(rowIndex) {
+        setCountry(rowIndex, DEFAULT_COUNTRY_ABBREVIATION)
+        setActivity(rowIndex, '');
+        setComment(rowIndex, '');
+        setWorkingHours(rowIndex, -1, '');
+    }
+
+    function setCountry(rowIndex, country) {
+        var countryDropdownListSelector = 'table:eq(1) tr:eq(' + (rowIndex + 1) + ') td:eq(0) select';
+        $(countryDropdownListSelector).val(country);
     }
 
     function setActivity(rowIndex, activity) {
