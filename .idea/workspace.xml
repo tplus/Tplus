@@ -50,10 +50,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="content-script.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="content-script.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tplus-chrome/content-script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="114" column="0" selection-start="4584" selection-end="4584" vertical-scroll-proportion="0.0">
+            <state line="5" column="57" selection-start="342" selection-end="342" vertical-scroll-proportion="0.083333336">
               <folding />
             </state>
           </provider>
@@ -92,16 +92,16 @@
       <file leaf-file-name="manifest.json" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tplus-chrome/manifest.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="20" selection-start="656" selection-end="656" vertical-scroll-proportion="0.0">
+            <state line="12" column="43" selection-start="349" selection-end="349" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="log-repository.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="log-repository.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tplus-chrome/log-repository.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="108" selection-start="1301" selection-end="1301" vertical-scroll-proportion="0.5">
+            <state line="30" column="108" selection-start="1301" selection-end="1301" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -132,8 +132,8 @@
         <option value="$PROJECT_DIR$/tplus-chrome/content_script.js" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/tplus-chrome/manifest.json" />
-        <option value="$PROJECT_DIR$/tplus-chrome/content-script.js" />
         <option value="$PROJECT_DIR$/tplus-chrome/log-repository.js" />
+        <option value="$PROJECT_DIR$/tplus-chrome/content-script.js" />
       </list>
     </option>
   </component>
@@ -504,23 +504,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tplus-chrome/content-script.js">
+    <entry file="file://$PROJECT_DIR$/tplus-chrome/log-repository.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="114" column="0" selection-start="4584" selection-end="4584" vertical-scroll-proportion="0.0">
+        <state line="30" column="108" selection-start="1301" selection-end="1301" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tplus-chrome/manifest.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="20" selection-start="656" selection-end="656" vertical-scroll-proportion="0.0">
+        <state line="12" column="43" selection-start="349" selection-end="349" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tplus-chrome/log-repository.js">
+    <entry file="file://$PROJECT_DIR$/tplus-chrome/content-script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="108" selection-start="1301" selection-end="1301" vertical-scroll-proportion="0.5">
+        <state line="5" column="57" selection-start="342" selection-end="342" vertical-scroll-proportion="0.083333336">
           <folding />
         </state>
       </provider>

@@ -3,7 +3,7 @@
         DEFAULT_ACTIVITY_CODE = 'PWC0001 TIGER MISC',
         DEFAULT_DAILY_WORKING_HOURS = 8,
         MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        DEFAULT_REPOSITORY_URL = 'http://10.18.8.31:1911';
+        DEFAULT_REPOSITORY_URL = 'http://10.18.8.31:1911/shortlog/tip?revcount=12000';
 
     function noOp() {
     }
