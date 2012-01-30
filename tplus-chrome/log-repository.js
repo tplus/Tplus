@@ -7,7 +7,6 @@ function LogRepository(data) {
 LogRepository.prototype = {
     search: function(name, endDateOfWeek) {
         var logEntries = this._extractLogEntries(name, endDateOfWeek);
-
         return this._transformLogEntries(logEntries);
     },
     _extractLogEntries: function(name, endDateOfWeek) {
@@ -25,14 +24,14 @@ LogRepository.prototype = {
         });
         return result;
     },
-    _isCheckedInBy: function(description, name) {
-        return description.indexOf(name) != -1
-    },
     _isInSameWeek: function(date, endDateOfWeek) {
         var realEndDate = new Date(endDateOfWeek);
         realEndDate = new Date(new Date(new Date(realEndDate).toDateString()).getTime() + 3600 * 1000 * 24);
         var logDate = new Date(date);
         return (realEndDate >= logDate) && ((realEndDate.getTime() - logDate.getTime()) <= 7 * this.MILLI_SECONDS_IN_ONE_DAY);
+    },
+    _isCheckedInBy: function(description, name) {
+        return description.indexOf(name) != -1
     },
     _transformLogEntries: function(logEntries) {
         var me = this;
@@ -46,27 +45,24 @@ LogRepository.prototype = {
                 var dayOfLogEntry = me._getNumberOfDay(logEntry.date);
                 return dayOfLogEntry == day;
             });
-            var commentsOfDay = _.uniq(_.map(logEntriesOfDay, function(logEntry) {
-                return logEntry.description.split(" ")[1];
-            }));
-            return  {'dayOfWeek': day, 'comment': me._transformComments(commentsOfDay)};
+            return  {'dayOfWeek': day, 'comment': me._extractComments(logEntriesOfDay)};
         });
     },
     _getNumberOfDay : function(date) {
         var dayNumberOfDate = new Date(date).getDay();
         return !dayNumberOfDate ? 7 : dayNumberOfDate;
     },
-    _transformComments: function(comments) {
+    _extractComments: function(logEntriesOfDay) {
         var result = [];
-        _.each(comments, function(comment) {
+        _.each(logEntriesOfDay, function(logEntry) {
+            var comment = logEntry.description.split(" ")[1];
             comment = comment.replace("#N/A", '').replace('N/A', '');
-            if (comment) {
+            if (comment && result.indexOf(comment) == -1) {
                 result.push(comment);
             }
         });
         return result.join(',');
     }
-
 }
 
 

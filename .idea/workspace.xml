@@ -101,7 +101,7 @@
       <file leaf-file-name="log-repository.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tplus-chrome/log-repository.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="22" selection-start="937" selection-end="937" vertical-scroll-proportion="0.41666666">
+            <state line="30" column="108" selection-start="1301" selection-end="1301" vertical-scroll-proportion="0.5">
               <folding />
             </state>
           </provider>
@@ -520,7 +520,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tplus-chrome/log-repository.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="22" selection-start="937" selection-end="937" vertical-scroll-proportion="0.41666666">
+        <state line="30" column="108" selection-start="1301" selection-end="1301" vertical-scroll-proportion="0.5">
           <folding />
         </state>
       </provider>
