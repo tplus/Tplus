@@ -2,25 +2,32 @@
 <html>
 <head>
     <style>
-        body {font-size: 14px;font-family: Arial;}
+        body {font-size: 14px;font-family: Arial}
+        #show_more_options {float:right; font-size:12px;margin-top: 5px;}
     </style>
 </head>
 <body>
 <h4>Hi, <span id="full_name"></span></h4>
 <p>
-    please provide your id, name or initials used in the SCM log entries:
+    What are your initials used in SCM log entries?
     <input type="text" id="initials" value=""/>
 </p>
 <p>
-    and specify the week ending date of the time report you wish to fill:
+    When is the ending date of the time report?
     <input type="text" id="end_date" value="" readonly="readonly"/>
     <button onclick="prev()">Prev</button><button onclick="next()">Next</button>
+    <a id="show_more_options" href="javascript:;" onclick="showMoreOptions()">+More</a>
+</p>
+<p id="more_options" style="display: none;">
+    Where is your repository to retrieve log entries?
+    <input type="text" id="repository_url" value="" />
 </p>
 <button onclick="searchAndFill()">Generate Report</button>
 <script type="text/javascript">
     var fullNameField = document.getElementById('full_name'),
             initialsField = document.getElementById('initials'),
             endDateField = document.getElementById('end_date'),
+            repositoryUrlField = document.getElementById('repository_url'),
             queryOption = getQueryOption(),
             initialsMap = JSON.parse(localStorage['tplus_initials_map'] || '{}'),
             MILLI_SECONDS_IN_ONE_DAY = 1000 * 3600 * 24,
@@ -33,6 +40,7 @@
     fullNameField.innerText = queryOption.fullName;
     initialsField.value = initialsMap[queryOption.fullName] || '';
     endDateField.value = endDate.toDateString();
+    repositoryUrlField.value = localStorage['tplus_repository_url'] || '';
 
     function getQueryOption() {
         return chrome.extension.getBackgroundPage()['queryOption'];
@@ -59,7 +67,17 @@
         }
         initialsMap[fullNameField.innerText] = initialsField.value;
         localStorage['tplus_initials_map'] = JSON.stringify(initialsMap);
-        chrome.tabs.sendRequest(getTabId(), {"initials":initialsField.value, "endDate":endDateField.value});
+        localStorage['tplus_repository_url'] = repositoryUrlField.value;
+        chrome.tabs.sendRequest(getTabId(), {
+            "initials":initialsField.value,
+            "endDate":endDateField.value,
+            "repositoryUrl":repositoryUrlField.value
+        });
+    }
+
+    function showMoreOptions() {
+        document.getElementById('show_more_options').style.display = 'none';
+        document.getElementById('more_options').style.display = 'block';
     }
 </script>
 </body>
