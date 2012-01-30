@@ -111,9 +111,7 @@
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
                 var data = xhr.responseText;
-                console.log(data);
                 var logEntries = new LogRepository(data).search(queryOption.initials, queryOption.endDate);
-                console.log(logEntries);
                 setEndDate(formatToTEDateString(new Date(queryOption.endDate)));
                 setExpenseStatus(false);
                 fillTimeReport(logEntries);
