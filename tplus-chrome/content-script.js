@@ -68,7 +68,7 @@
     }
 
     function setTimeRecordFields(timeRecords, rowIndex) {
-        setCountry(rowIndex, DEFAULT_COUNTRY_ABBREVIATION)
+        setCountry(rowIndex, DEFAULT_COUNTRY_ABBREVIATION);
         setActivity(rowIndex, DEFAULT_ACTIVITY_CODE);
         setBillableStatus(rowIndex, true);
         setComment(rowIndex, timeRecords[rowIndex].comment);
@@ -76,8 +76,9 @@
     }
 
     function clearTimeRecordFields(rowIndex) {
-        setCountry(rowIndex, DEFAULT_COUNTRY_ABBREVIATION)
+        setCountry(rowIndex, DEFAULT_COUNTRY_ABBREVIATION);
         setActivity(rowIndex, '');
+        clearBillableStatus(rowIndex);
         setComment(rowIndex, '');
         setWorkingHours(rowIndex, -1, '');
     }
@@ -97,6 +98,13 @@
             ? 'table:eq(1) tr:eq(' + (rowIndex + 1) + ') td:eq(4) input:eq(0)'
             : 'table:eq(1) tr:eq(' + (rowIndex + 1) + ') td:eq(4) input:eq(1)';
         $(billableRadioButtonSelector).click();
+    }
+
+    function clearBillableStatus(rowIndex) {
+        var yesRadioButtonSelector = 'table:eq(1) tr:eq(' + (rowIndex + 1) + ') td:eq(4) input:eq(0)',
+            noRadioButtonSelector = 'table:eq(1) tr:eq(' + (rowIndex + 1) + ') td:eq(4) input:eq(1)';
+        $(yesRadioButtonSelector).removeAttr('checked');
+        $(noRadioButtonSelector).removeAttr('checked');
     }
 
     function setComment(rowIndex, comment) {
