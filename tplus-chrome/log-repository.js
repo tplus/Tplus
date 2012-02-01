@@ -13,7 +13,7 @@ LogRepository.prototype = {
         var me = this;
         var result = [];
         $(this.data).find(".bigtable tr").each(function(i, v) {
-            var logDate = $(v).find('.age').text();
+            var logDate = $(v).find('.date').text();
             var description = $(v).find('.description a').text();
             if (me._isInSameWeek(logDate, endDateOfWeek) && me._isCheckedInBy(description, name)) {
                 result.push({
