@@ -12,7 +12,7 @@
     function fillTimeReport(timeRecords, currentIndex) {
         currentIndex = currentIndex || 0;
         if (currentIndex === timeRecords.length) {
-            while(currentIndex < getExistingTimeRecordRowCount()) {
+            while (currentIndex < getExistingTimeRecordRowCount()) {
                 clearTimeRecordFields(currentIndex++);
             }
             return;
@@ -133,22 +133,37 @@
 
 
     function searchAndFill(queryOption) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", queryOption.repositoryUrl || DEFAULT_REPOSITORY_URL, true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4) {
-                var data = xhr.responseText;
-                var logEntries = new LogRepository(data).search(queryOption.initials, queryOption.endDate);
-                setEndDate(formatToTEDateString(new Date(queryOption.endDate)));
-                setExpenseStatus(false);
-                fillTimeReport(logEntries);
+        async.parallel({
+            one: function(callback) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", queryOption.repositoryUrl || DEFAULT_REPOSITORY_URL, true);
+                xhr.onreadystatechange = function() {
+                    callback(null, xhr.responseText);
+                }
+                xhr.send();
+            },
+            two: function(callback) {
+                jQuery.getFeed({
+                    url: 'https://www.google.com/calendar/feeds/s7l50g2qcs8msbvjlf2hb7s4m0%40group.calendar.google.com/public/basic',
+                    success: function(feed) {
+                        callback(null, feed);
+                    }
+                })
             }
-        }
-        xhr.send();
+        }, function(err, results) {
+            var logData = results.one;
+            var logEntries = new LogRepository(logData).search(queryOption.initials, queryOption.endDate);
+            var feed = results.two;
+            var holidayEntries = new HolidayRepository(feed).search(queryOption.endDate);
+//            var allEntries = holidayEntries.merge(logEntries);
+            setEndDate(formatToTEDateString(new Date(queryOption.endDate)));
+            setExpenseStatus(false);
+//            fillTimeReport(allEntries);
+        });
     }
 
     function onRequest(request) {
-        if(!request || !request.initials || !request.endDate) return;
+        if (!request || !request.initials || !request.endDate) return;
         searchAndFill(request);
     }
 

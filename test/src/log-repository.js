@@ -9,7 +9,7 @@ LogRepository.prototype = {
         var logEntries = this._extractLogEntries(name, endDateOfWeek);
         return this._transformLogEntries(logEntries);
     },
-    _extractLogEntries: function(name, endDateOfWeek) {
+    extractHolidays: function(name, endDateOfWeek) {
         var me = this;
         var result = [];
         $(this.data).find(".bigtable tr").each(function(i, v) {

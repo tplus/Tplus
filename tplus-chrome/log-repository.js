@@ -1,7 +1,7 @@
 function LogRepository(data) {
     this.daysOfWeek = ['1','2','3','4','5','6','7'];
-    this.MILLI_SECONDS_IN_ONE_DAY = 1000 * 3600 * 24;
     this.data = data;
+    this._util = new Util();
 }
 
 LogRepository.prototype = {
@@ -15,7 +15,7 @@ LogRepository.prototype = {
         $(this.data).find(".bigtable tr").each(function(i, v) {
             var logDate = $(v).find('.date').text();
             var description = $(v).find('.description a').text();
-            if (me._isInSameWeek(logDate, endDateOfWeek) && me._isCheckedInBy(description, name)) {
+            if (me._util.isInSameWeek(logDate, endDateOfWeek) && me._isCheckedInBy(description, name)) {
                 result.push({
                     'date' : logDate,
                     'description': description
@@ -24,19 +24,13 @@ LogRepository.prototype = {
         });
         return result;
     },
-    _isInSameWeek: function(date, endDateOfWeek) {
-        var realEndDate = new Date(endDateOfWeek);
-        realEndDate = new Date(new Date(new Date(realEndDate).toDateString()).getTime() + 3600 * 1000 * 24);
-        var logDate = new Date(date);
-        return (realEndDate >= logDate) && ((realEndDate.getTime() - logDate.getTime()) <= 7 * this.MILLI_SECONDS_IN_ONE_DAY);
-    },
     _isCheckedInBy: function(description, name) {
         return description.indexOf(name) != -1
     },
     _transformLogEntries: function(logEntries) {
         var me = this;
         var workingDays = _.sortBy(_.uniq(_.map(logEntries, function(logEntry) {
-            return me._getNumberOfDay(logEntry.date);
+            return me._util.getNumberOfDay(logEntry.date);
         })), function(day) {
             return day;
         });
@@ -47,10 +41,6 @@ LogRepository.prototype = {
             });
             return  {'dayOfWeek': day, 'comment': me._extractComments(logEntriesOfDay)};
         });
-    },
-    _getNumberOfDay : function(date) {
-        var dayNumberOfDate = new Date(date).getDay();
-        return !dayNumberOfDate ? 7 : dayNumberOfDate;
     },
     _extractComments: function(logEntriesOfDay) {
         var result = [];

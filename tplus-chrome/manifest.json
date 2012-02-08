@@ -14,7 +14,7 @@
             "run_at":"document_idle",
             "all_frames":false,
             "css":["tplus.css"],
-            "js":["jquery-1.7.1.min.js", "underscore.js","log-repository.js","content-script.js"]
+            "js":["jquery-1.7.1.min.js", "underscore.js", "jatom.js", "jfeed.js", "jfeeditem.js", "jrss.js", "async.js", "util.js", "holiday-repository.js", "log-repository.js", "content-script.js" ]
         }
     ],
     "permissions":[
