@@ -76,7 +76,7 @@
     }
 
     function clearTimeRecordFields(rowIndex) {
-        setCountry(rowIndex, DEFAULT_COUNTRY_ABBREVIATION);
+        setCountry(rowIndex, '');
         setActivity(rowIndex, '');
         clearBillableStatus(rowIndex);
         setComment(rowIndex, '');
