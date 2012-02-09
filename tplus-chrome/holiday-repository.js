@@ -22,7 +22,9 @@ HolidayRepository.prototype = {
             if (dateUtil.isInSameWeek(holiday.date, endDateOfWeek)) {
                 result.push({
                     dayOfWeek: dateUtil.getNumberOfDay(holiday.date),
-                    comment: holiday.title
+                    comment: holiday.title,
+                    code: "TW_TOFF LEAVE PUBLIC_HOLIDAY",
+                    billable: false
                 });
             }
         });

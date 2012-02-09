@@ -1,6 +1,7 @@
 function LogRepository(data) {
     this.daysOfWeek = ['1','2','3','4','5','6','7'];
-    this.data = data;
+    this.TIGER_ACTIVITY_CODE = 'PWC0001 TIGER MISC',
+        this.data = data;
 }
 
 LogRepository.prototype = {
@@ -38,7 +39,11 @@ LogRepository.prototype = {
                 var dayOfLogEntry = me._getNumberOfDay(logEntry.date);
                 return dayOfLogEntry == day;
             });
-            return  {'dayOfWeek': day, 'comment': me._extractComments(logEntriesOfDay)};
+            return  {'dayOfWeek': day,
+                'comment': me._extractComments(logEntriesOfDay),
+                'code': this.TIGER_ACTIVITY_CODE,
+                'billable': true
+            };
         });
     },
     _extractComments: function(logEntriesOfDay) {
