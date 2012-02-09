@@ -1,6 +1,5 @@
 function HolidayRepository(data) {
     this._holidayData = data;
-    this._util = new Util();
 }
 
 HolidayRepository.prototype = {
@@ -20,9 +19,9 @@ HolidayRepository.prototype = {
         var result = [];
         var me = this;
         _.each(holidays, function(holiday) {
-            if (me._util.isInSameWeek(holiday.date, endDateOfWeek)) {
+            if (dateUtil.isInSameWeek(holiday.date, endDateOfWeek)) {
                 result.push({
-                    dayOfWeek: me._util.getNumberOfDay(holiday.date),
+                    dayOfWeek: dateUtil.getNumberOfDay(holiday.date),
                     comment: holiday.title
                 });
             }

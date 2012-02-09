@@ -1,7 +1,6 @@
 function LogRepository(data) {
     this.daysOfWeek = ['1','2','3','4','5','6','7'];
     this.data = data;
-    this._util = new Util();
 }
 
 LogRepository.prototype = {
@@ -15,7 +14,7 @@ LogRepository.prototype = {
         $(this.data).find(".bigtable tr").each(function(i, v) {
             var logDate = $(v).find('.date').text();
             var description = $(v).find('.description a').text();
-            if (me._util.isInSameWeek(logDate, endDateOfWeek) && me._isCheckedInBy(description, name)) {
+            if (dateUtil.isInSameWeek(logDate, endDateOfWeek) && me._isCheckedInBy(description, name)) {
                 result.push({
                     'date' : logDate,
                     'description': description
@@ -30,7 +29,7 @@ LogRepository.prototype = {
     _transformLogEntries: function(logEntries) {
         var me = this;
         var workingDays = _.sortBy(_.uniq(_.map(logEntries, function(logEntry) {
-            return me._util.getNumberOfDay(logEntry.date);
+            return dateUtil.getNumberOfDay(logEntry.date);
         })), function(day) {
             return day;
         });
