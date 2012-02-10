@@ -1,10 +1,10 @@
 {
     "name":"TPlus Chrome Extension",
-    "version":"1.0",
+    "version":"1.0.3",
     "description":"Chrome extension of TPlus",
     "page_action":{
         "default_name":"TPlus",
-        "default_icon":"tplus.png",
+        "default_icon":"image/tplus.png",
         "popup":"popup.html"
     },
     "background_page":"background.html",
@@ -13,8 +13,8 @@
             "matches":["https://te.thoughtworks.com/time_sheets/new"],
             "run_at":"document_idle",
             "all_frames":false,
-            "css":["tplus.css"],
-            "js":["jquery-1.7.1.min.js", "underscore.js", "jatom.js", "jfeed.js", "jfeeditem.js", "jrss.js", "date-util.js", "holiday-repository.js", "log-repository.js", "content-script.js" ]
+            "css":["css/tplus.css"],
+            "js":["lib/jquery-1.7.1.min.js", "lib/underscore.js", "lib/jatom.js", "lib/jfeed.js", "lib/jfeeditem.js", "lib/jrss.js", "script/date-util.js", "script/holiday-repository.js", "script/log-repository.js", "script/content-script.js" ]
         }
     ],
     "permissions":[
