@@ -5,7 +5,7 @@ function LogRepository(data) {
 }
 
 LogRepository.prototype = {
-    search: function(name, endDateOfWeek) {
+    filter: function(name, endDateOfWeek) {
         var logEntries = this._extractLogEntries(name, endDateOfWeek);
         return this._transformLogEntries(logEntries);
     },
@@ -47,10 +47,13 @@ LogRepository.prototype = {
         });
     },
     _extractComments: function(logEntriesOfDay) {
+        var ignoreCharacter = ["#N/A", "#NA", "N/A", "NA"];
         var result = [];
         _.each(logEntriesOfDay, function(logEntry) {
             var comment = logEntry.description.split(" ")[1];
-            comment = comment.replace("#N/A", '').replace('N/A', '');
+            _.each(ignoreCharacter, function(character){
+                comment = comment.replace(character, '');
+            })
             if (comment && result.indexOf(comment) == -1) {
                 result.push(comment);
             }

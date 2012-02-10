@@ -69,8 +69,8 @@
 
     function setTimeRecordFields(timeRecords, rowIndex) {
         setCountry(rowIndex, DEFAULT_COUNTRY_ABBREVIATION);
-        setActivity(rowIndex, DEFAULT_ACTIVITY_CODE);
-        setBillableStatus(rowIndex, true);
+        setActivity(rowIndex, timeRecords[rowIndex].code);
+        setBillableStatus(rowIndex, timeRecords[rowIndex].billable);
         setComment(rowIndex, timeRecords[rowIndex].comment);
         setWorkingHours(rowIndex, timeRecords[rowIndex].dayOfWeek, DEFAULT_DAILY_WORKING_HOURS);
     }
@@ -124,7 +124,6 @@
         }
     }
 
-
     function formatToTEDateString(date) {
         var dateStr = date.getDate() < 10 ? '0' + date.getDate() : date.getDate(),
             monthStr = MONTH_NAMES[date.getMonth()],
@@ -132,24 +131,23 @@
         return dateStr + ' ' + monthStr + ' ' + yearStr;
     }
 
+    function generateTimeRecords(queryOption, logData, holidayCalendarFeed) {
+        var logEntries = new LogRepository(logData).filter(queryOption.initials, queryOption.endDate);
+        var holidayEntries = new HolidayRepository(holidayCalendarFeed).filter(queryOption.endDate);
+        return holidayEntries.concat(logEntries).sort(function(item1, item2) {
+            return item1.dayOfWeek > item2.dayOfWeek;
+        });
+    }
+
     function searchAndFill(queryOption) {
-
-        function callback(logData, holidayCalendarFeed) {
-            var logEntries = new LogRepository(logData).search(queryOption.initials, queryOption.endDate);
-            var holidayEntries = new HolidayRepository(holidayCalendarFeed).search(queryOption.endDate);
-            var allEntries = holidayEntries.concat(logEntries);
-            setEndDate(formatToTEDateString(new Date(queryOption.endDate)));
-            setExpenseStatus(false);
-//            fillTimeReport(allEntries);
-        }
-
-
         jQuery.get(queryOption.repositoryUrl || DEFAULT_REPOSITORY_URL, function(data) {
             jQuery.getFeed({
                 url: 'https://www.google.com/calendar/feeds/s7l50g2qcs8msbvjlf2hb7s4m0%40group.calendar.google.com/public/basic',
                 success: function(feed) {
-                    console.log(feed);
-                    callback(data, feed);
+                    var entries = generateTimeRecords(queryOption, data, feed);
+                    setEndDate(formatToTEDateString(new Date(queryOption.endDate)));
+                    setExpenseStatus(false);
+                    fillTimeReport(entries);
                 }
             });
         });
