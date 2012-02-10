@@ -36,21 +36,17 @@ LogRepository.prototype = {
     _transformLogEntries: function(logEntries) {
         var me = this;
         var workingDays = _.sortBy(_.uniq(_.map(logEntries, function(logEntry) {
-            return me._getNumberOfDay(logEntry.date);
+            return dateUtil.getNumberOfDay(logEntry.date);
         })), function(day) {
             return day;
         });
         return _.map(workingDays, function(day) {
             var logEntriesOfDay = _.filter(logEntries, function(logEntry) {
-                var dayOfLogEntry = me._getNumberOfDay(logEntry.date);
+                var dayOfLogEntry = dateUtil.getNumberOfDay(logEntry.date);
                 return dayOfLogEntry == day;
             });
             return  {'dayOfWeek': day, 'comment': me._extractComments(logEntriesOfDay)};
         });
-    },
-    _getNumberOfDay : function(date) {
-        var dayNumberOfDate = new Date(date).getDay();
-        return !dayNumberOfDate ? 7 : dayNumberOfDate;
     },
     _extractComments: function(logEntriesOfDay) {
         var result = [];

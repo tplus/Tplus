@@ -124,6 +124,7 @@
         }
     }
 
+
     function formatToTEDateString(date) {
         var dateStr = date.getDate() < 10 ? '0' + date.getDate() : date.getDate(),
             monthStr = MONTH_NAMES[date.getMonth()],
@@ -131,34 +132,26 @@
         return dateStr + ' ' + monthStr + ' ' + yearStr;
     }
 
-
     function searchAndFill(queryOption) {
-        async.parallel({
-            one: function(callback) {
-                var xhr = new XMLHttpRequest();
-                xhr.open("GET", queryOption.repositoryUrl || DEFAULT_REPOSITORY_URL, true);
-                xhr.onreadystatechange = function() {
-                    callback(null, xhr.responseText);
-                }
-                xhr.send();
-            },
-            two: function(callback) {
-                jQuery.getFeed({
-                    url: 'https://www.google.com/calendar/feeds/s7l50g2qcs8msbvjlf2hb7s4m0%40group.calendar.google.com/public/basic',
-                    success: function(feed) {
-                        callback(null, feed);
-                    }
-                })
-            }
-        }, function(err, results) {
-            var logData = results.one;
+
+        function callback(logData, holidayCalendarFeed) {
             var logEntries = new LogRepository(logData).search(queryOption.initials, queryOption.endDate);
-            var feed = results.two;
-            var holidayEntries = new HolidayRepository(feed).search(queryOption.endDate);
-//            var allEntries = holidayEntries.merge(logEntries);
+            var holidayEntries = new HolidayRepository(holidayCalendarFeed).search(queryOption.endDate);
+            var allEntries = holidayEntries.concat(logEntries);
             setEndDate(formatToTEDateString(new Date(queryOption.endDate)));
             setExpenseStatus(false);
 //            fillTimeReport(allEntries);
+        }
+
+
+        jQuery.get(queryOption.repositoryUrl || DEFAULT_REPOSITORY_URL, function(data) {
+            jQuery.getFeed({
+                url: 'https://www.google.com/calendar/feeds/s7l50g2qcs8msbvjlf2hb7s4m0%40group.calendar.google.com/public/basic',
+                success: function(feed) {
+                    console.log(feed);
+                    callback(data, feed);
+                }
+            });
         });
     }
 

@@ -5,6 +5,7 @@ function HolidayRepository(data) {
 HolidayRepository.prototype = {
     search: function(endDateOfWeek) {
         var holidays = this.extractHolidays();
+        console.log("holidays after extraction", holidays);
         return this._filterHolidays(holidays);
     },
     extractHolidays: function() {
@@ -19,7 +20,7 @@ HolidayRepository.prototype = {
         var result = [];
         var me = this;
         _.each(holidays, function(holiday) {
-            if (dateUtil.isInSameWeek(holiday.date, endDateOfWeek)) {
+            if (dateUtil.isInSameWeek(  e, endDateOfWeek)) {
                 result.push({
                     dayOfWeek: dateUtil.getNumberOfDay(holiday.date),
                     comment: holiday.title,
@@ -28,6 +29,7 @@ HolidayRepository.prototype = {
                 });
             }
         });
+        console.log("holidays reuslt", result);
         return result;
     }
 }
