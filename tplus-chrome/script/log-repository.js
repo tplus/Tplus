@@ -47,16 +47,15 @@ LogRepository.prototype = {
         });
     },
     _extractComments: function(logEntriesOfDay) {
-        var ignoreCharacter = ["#N/A", "#NA", "N/A", "NA"];
         var result = [];
         _.each(logEntriesOfDay, function(logEntry) {
-            var comment = logEntry.description.split(" ")[1];
-            _.each(ignoreCharacter, function(character){
-                comment = comment.replace(character, '');
-            })
-            if (comment && result.indexOf(comment) == -1) {
-                result.push(comment);
-            }
+            var result = logEntry.description.match(/\#\d+/);
+			if(!!result){
+				var comment = result[0];
+				if (comment && result.indexOf(comment) == -1) {
+					result.push(comment);
+				}
+			}
         });
         return result.join(',');
     }
