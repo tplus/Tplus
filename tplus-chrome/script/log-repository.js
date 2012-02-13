@@ -49,7 +49,7 @@ LogRepository.prototype = {
     _extractComments: function(logEntriesOfDay) {
         var result = [];
         _.each(logEntriesOfDay, function(logEntry) {
-            var result = logEntry.description.match(/\#\d+/);
+            var result = logEntry.description.match(/#r{0,1}\d+/i);
 			if(!!result){
 				var comment = result[0];
 				if (comment && result.indexOf(comment) == -1) {
