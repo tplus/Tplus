@@ -47,17 +47,17 @@ LogRepository.prototype = {
         });
     },
     _extractComments: function(logEntriesOfDay) {
-        var result = [];
+        var comments = [];
         _.each(logEntriesOfDay, function(logEntry) {
             var result = logEntry.description.match(/#r{0,1}\d+/i);
 			if(!!result){
 				var comment = result[0];
-				if (comment && result.indexOf(comment) == -1) {
-					result.push(comment);
+				if (comment && comments.indexOf(comment) == -1) {
+					comments.push(comment);
 				}
 			}
         });
-        return result.join(',');
+        return comments.join(',');
     }
 }
 
