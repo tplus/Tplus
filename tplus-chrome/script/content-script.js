@@ -4,7 +4,7 @@
         DEFAULT_ACTIVITY_CODE = 'PWC0001 TIGER MISC',
         DEFAULT_DAILY_WORKING_HOURS = 8,
         MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        DEFAULT_REPOSITORY_URL = 'http://10.18.8.31:1911/shortlog/tip?revcount=12000';
+        DEFAULT_REPOSITORY_URL = 'http://10.18.5.147:1911/shortlog/tip?revcount=12000';
 
     function noOp() {
     }
@@ -142,7 +142,7 @@
     function searchAndFill(queryOption) {
         jQuery.get(queryOption.repositoryUrl || DEFAULT_REPOSITORY_URL, function(data) {
             jQuery.getFeed({
-                url: 'https://www.google.com/calendar/feeds/s7l50g2qcs8msbvjlf2hb7s4m0%40group.calendar.google.com/public/basic',
+                url: 'https://www.google.com/calendar/feeds/pf9rcrmg2ngm4k2vv7p70t8o6c%40group.calendar.google.com/public/basic',
                 success: function(feed) {
                     var entries = generateTimeRecords(queryOption, data, feed);
                     setEndDate(formatToTEDateString(new Date(queryOption.endDate)));
