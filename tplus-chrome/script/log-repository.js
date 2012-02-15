@@ -25,7 +25,8 @@ LogRepository.prototype = {
         return result;
     },
     _isCheckedInBy: function(description, name) {
-        return description.indexOf(name) != -1
+        var result = description.match(/\[(\w+\d*)&{0,1}(\w*\d*)\]/i);
+        return !!result && (result[1].toLowerCase() == name.toLowerCase() || result[2].toLowerCase() == name.toLowerCase());
     },
     _transformLogEntries: function(logEntries) {
         var me = this;
