@@ -1,6 +1,6 @@
 function LogRepository(data) {
     this.daysOfWeek = ['1','2','3','4','5','6','7'];
-    this.TIGER_ACTIVITY_CODE = 'PWC0001 TIGER MISC',
+    this.TIGER_ACTIVITY_CODE = 'PWC0001 TIGER MISC';
     this.data = data;
 }
 

@@ -1,29 +1,22 @@
-function HolidayRepository(data) {
-    this._holidayData = data;
+function HolidayRepository() {
+    this.holidays = {'year':'2012',
+                        'items': [{ 'date':'2012-04-03',
+                                       'title': 'spring'
+                                    }]
+                        };
+    this.PUBLIC_HOLIDAY_CODE = "TW_TOFF LEAVE PUBLIC_HOLIDAY";
 }
 
 HolidayRepository.prototype = {
-    filter: function(endDateOfWeek) {
-        var holidays = this.extractHolidays();
-        return this._filterHolidays(holidays, endDateOfWeek);
-    },
-    extractHolidays: function() {
-        var me = this;
-        return _.map(this._holidayData.items, function(item) {
-            var holidayDate = new Date(item.description.split("<br />")[0].substr(5).trim());
-            return {date: holidayDate, title: item.title};
-        });
-    },
-
-    _filterHolidays: function(holidays, endDateOfWeek) {
+    getHolidayBy: function(endDateOfWeek) {
         var result = [];
         var me = this;
-        _.each(holidays, function(holiday) {
+        _.each(me.holidays.items, function(holiday) {
             if (dateUtil.isInSameWeek(holiday.date, endDateOfWeek)) {
                 result.push({
                     dayOfWeek: dateUtil.getNumberOfDay(holiday.date),
                     comment: holiday.title,
-                    code: "TW_TOFF LEAVE PUBLIC_HOLIDAY",
+                    code: me.PUBLIC_HOLIDAY_CODE,
                     billable: false
                 });
             }

@@ -5,6 +5,7 @@
         DEFAULT_DAILY_WORKING_HOURS = 8,
         MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         DEFAULT_REPOSITORY_URL = 'http://10.18.5.147:1911/shortlog/tip?revcount=1000';
+    var endDate;
 
     function noOp() {
     }
@@ -131,31 +132,17 @@
         return dateStr + ' ' + monthStr + ' ' + yearStr;
     }
 
-    function generateTimeRecords(queryOption, logData, holidayCalendarFeed) {
-        var logEntries = new LogRepository(logData).filter(queryOption.initials, queryOption.endDate);
-        var holidayEntries = new HolidayRepository(holidayCalendarFeed).filter(queryOption.endDate);
-        return holidayEntries.concat(logEntries).sort(function(item1, item2) {
-            return item1.dayOfWeek > item2.dayOfWeek;
-        });
-    }
-
-    function searchAndFill(queryOption) {
-        jQuery.get(queryOption.repositoryUrl || DEFAULT_REPOSITORY_URL, function(data) {
-            jQuery.getFeed({
-                url: 'https://www.google.com/calendar/feeds/pf9rcrmg2ngm4k2vv7p70t8o6c%40group.calendar.google.com/public/basic',
-                success: function(feed) {
-                    var entries = generateTimeRecords(queryOption, data, feed);
-                    setEndDate(formatToTEDateString(new Date(queryOption.endDate)));
-                    setExpenseStatus(false);
-                    fillTimeReport(entries);
-                }
-            });
-        });
+    function generateTimeReports(records){
+        setEndDate(formatToTEDateString(new Date(this.endDate)));
+        setExpenseStatus(false);
+        fillTimeReport(records);
     }
 
     function onRequest(request) {
         if (!request || !request.initials || !request.endDate) return;
-        searchAndFill(request);
+        this.endDate = request.endDate;
+        var respositoryUrl = request.repositoryUrl || DEFAULT_REPOSITORY_URL;
+        new TimeSheetRecordsBuilder(request.initials, request.endDate, respositoryUrl).build(generateTimeReports);
     }
 
     $(function () {
