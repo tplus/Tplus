@@ -7,7 +7,7 @@ function TimeSheetRecordsBuilder(userName, endDate,logRepositoryUrl) {
 TimeSheetRecordsBuilder.prototype = {
     build:function (callback) {
         var me = this;
-        var holidays = new HolidayRepository().findBy(this.endDate);
+        var holidays = [];//new HolidayRepository().findBy(this.endDate);
         jQuery.get(this.logRepositoryUrl, function(data) {
             var logs = new LogParser(data).filter(this.userName, this.endDate);
             callback(me.merge(logs, holidays));
