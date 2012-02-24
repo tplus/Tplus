@@ -1,10 +1,10 @@
-function LogRepository(data) {
+function LogParser(data) {
     this.daysOfWeek = ['1','2','3','4','5','6','7'];
     this.TIGER_ACTIVITY_CODE = 'PWC0001 TIGER MISC';
     this.data = data;
 }
 
-LogRepository.prototype = {
+LogParser.prototype = {
     filter: function(name, endDateOfWeek) {
         var logEntries = this._extractLogEntries(name, endDateOfWeek);
         return this._transformLogEntries(logEntries);

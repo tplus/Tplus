@@ -11,6 +11,9 @@
         var dayNumberOfDate = new Date(date).getDay();
         return !dayNumberOfDate ? 7 : dayNumberOfDate;
     };
+    dateUtil.getYearOfDay = function(date) {
+        return new Date(date).getYear();
+    };
 
     this["dateUtil"] = dateUtil;
 })();
