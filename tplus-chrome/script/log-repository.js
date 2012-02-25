@@ -20,7 +20,7 @@ LogRepository.prototype = {
             if (dateUtil.isInSameWeek(logDate, endDateOfWeek) && self.commentHelper.isCheckedInBy(description, name)) {
                 result.push({
                     'dayOfWeek' : dateUtil.getNumberOfDay(logDate),
-                    'comment': self.commentHelper.extractStoryOrDefectOrTaskNumber()
+                    'comment': self.commentHelper.extractStoryOrDefectOrTaskNumber(description)
                 });
             }
         });
