@@ -132,17 +132,13 @@
         return dateStr + ' ' + monthStr + ' ' + yearStr;
     }
 
-    function generateTimeReports(records){
-        setEndDate(formatToTEDateString(new Date(this.endDate)));
-        setExpenseStatus(false);
-        fillTimeReport(records);
-    }
-
     function onRequest(request) {
         if (!request || !request.initials || !request.endDate) return;
-        this.endDate = request.endDate;
-        var respositoryUrl = request.repositoryUrl || DEFAULT_REPOSITORY_URL;
-        new TimeSheetRecordsBuilder(request.initials, request.endDate, respositoryUrl).build(generateTimeReports);
+        new TimeSheetRecords().load(request, function(records){
+            setEndDate(formatToTEDateString(new Date(request.endDate)));
+            setExpenseStatus(false);
+            fillTimeReport(records);
+        });
     }
 
     $(function () {

@@ -28,7 +28,7 @@ PublicHolidays.prototype = {
     findBy: function(endDateOfWeek) {
         var self = this;
         var result = [];
-        var holidaysInThisYear = _.find(me.holidaysInWeekDay, function(holiday) {
+        var holidaysInThisYear = _.find(self.holidaysInWeekDay, function(holiday) {
             return holiday.year == dateUtil.getYearOfDay(endDateOfWeek);
         });
         _.each(holidaysInThisYear.items, function(holiday) {
