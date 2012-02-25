@@ -1,17 +1,21 @@
 function TimeSheetRecordsBuilder(userName, endDate,logRepositoryUrl) {
-    this.userName = userName;
-    this.endDate = endDate;
+    this.criteria = {"userName": userName, "endDate" : endDate};
     this.logRepositoryUrl = logRepositoryUrl;
+    this.logRepository = new LogRepository();
+    this.publicHolidays = new PublicHolidays();
+    this.parser = new LogParser();
 }
 
 TimeSheetRecordsBuilder.prototype = {
     build:function (callback) {
-        var me = this;
-        var holidays = [];//new HolidayRepository().findBy(this.endDate);
-        jQuery.get(this.logRepositoryUrl, function(data) {
-            var logs = new LogParser(data).filter(this.userName, this.endDate);
-            callback(me.merge(logs, holidays));
-        });
+        var self = this;
+        var holidays = self.publicHolidays.findBy(self.criteria.endDate);
+        self.logRepository.findBy(self.logRepositoryUrl, self.criteria, function(data){
+            var logs = self.parser.parse(data);
+            var records = self.merge(logs, holidays);
+            callback(records);
+        })
+
     },
 
     merge:function (logs, holidays) {

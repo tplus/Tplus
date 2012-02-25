@@ -1,5 +1,5 @@
-function HolidayRepository() {
-    this.holidaysInWeekDay = [
+function PublicHolidays(holidays) {
+    this.holidaysInWeekDay = holidays || [
                                 {"year":"2012",
                                  "items": [
                                      { "date":"2012-01-03","title": "New Year's Day"},
@@ -24,19 +24,19 @@ function HolidayRepository() {
     this.PUBLIC_HOLIDAY_CODE = "TW_TOFF LEAVE PUBLIC_HOLIDAY";
 }
 
-HolidayRepository.prototype = {
+PublicHolidays.prototype = {
     findBy: function(endDateOfWeek) {
+        var self = this;
         var result = [];
-        var me = this;
         var holidaysInThisYear = _.find(me.holidaysInWeekDay, function(holiday) {
-            return holiday.year === dateUtil.getYearOfDay(endDateOfWeek);
+            return holiday.year == dateUtil.getYearOfDay(endDateOfWeek);
         });
-        _.each(holidaysInThisYear, function(holiday) {
+        _.each(holidaysInThisYear.items, function(holiday) {
             if (dateUtil.isInSameWeek(holiday.date, endDateOfWeek)) {
                 result.push({
                     dayOfWeek: dateUtil.getNumberOfDay(holiday.date),
                     comment: holiday.title,
-                    code: me.PUBLIC_HOLIDAY_CODE,
+                    code: self.PUBLIC_HOLIDAY_CODE,
                     billable: false
                 });
             }

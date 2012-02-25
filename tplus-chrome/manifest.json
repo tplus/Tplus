@@ -14,7 +14,7 @@
             "run_at":"document_idle",
             "all_frames":false,
             "css":["css/tplus.css"],
-            "js":["lib/jquery-1.7.1.min.js", "lib/underscore.js", "script/date-util.js", "script/holiday-repository.js", "script/log-parser.js", "script/content-script.js" ]
+            "js":["lib/jquery-1.7.1.min.js", "lib/underscore.js", "script/date-util.js","script/timesheet-record-builder.js", "script/public-holidays.js", "script/log-parser.js", "script/log-repository.js", "script/content-script.js" ]
         }
     ],
     "permissions":[
