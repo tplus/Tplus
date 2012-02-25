@@ -1,54 +1,57 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
+        "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <title>Jasmine Spec Runner</title>
+    <title>Jasmine Spec Runner</title>
 
-  <link rel="shortcut icon" type="image/png" href="lib/jasmine-1.1.0/jasmine_favicon.png">
+    <link rel="shortcut icon" type="image/png" href="lib/jasmine-1.1.0/jasmine_favicon.png">
 
-  <link rel="stylesheet" type="text/css" href="lib/jasmine-1.1.0/jasmine.css">
-  <script type="text/javascript" src="lib/jasmine-1.1.0/jasmine.js"></script>
-  <script type="text/javascript" src="lib/jasmine-1.1.0/jasmine-html.js"></script>
-  <script type="text/javascript" src="lib/jquery-1.7.1.min.js"></script>
-  <script type="text/javascript" src="lib/underscore.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/jasmine-1.1.0/jasmine.css">
+    <script type="text/javascript" src="lib/jasmine-1.1.0/jasmine.js"></script>
+    <script type="text/javascript" src="lib/jasmine-1.1.0/jasmine-html.js"></script>
+    <script type="text/javascript" src="lib/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="lib/underscore.js"></script>
 
-  <!-- include spec files here... -->
-  <script type="text/javascript" src="spec/public-holiday-spec.js"></script>
-  <script type="text/javascript" src="spec/log-parser-spec.js"></script>
 
-  <!-- include source files here... -->
-  <script type="text/javascript" src="../tplus-chrome/script/date-util.js"></script>
-  <script type="text/javascript" src="../tplus-chrome/script/log-parser.js"></script>
-  <script type="text/javascript" src="../tplus-chrome/script/public-holidays.js"></script>
+    <!-- include source files here... -->
+    <script type="text/javascript" src="../tplus-chrome/script/date-util.js"></script>
+    <script type="text/javascript" src="../tplus-chrome/script/timesheet-converter.js"></script>
+    <script type="text/javascript" src="../tplus-chrome/script/log-message-helper.js"></script>
+    <script type="text/javascript" src="../tplus-chrome/script/public-holidays.js"></script>
 
-  <script type="text/javascript">
-    (function() {
-      var jasmineEnv = jasmine.getEnv();
-      jasmineEnv.updateInterval = 1000;
+    <!-- include spec files here... -->
+    <script type="text/javascript" src="spec/public-holiday-spec.js"></script>
+    <script type="text/javascript" src="spec/timesheet-convert-spec.js"></script>
+    <script type="text/javascript" src="spec/log-message-helper-spec.js"></script>
 
-      var trivialReporter = new jasmine.TrivialReporter();
+    <script type="text/javascript">
+        (function () {
+            var jasmineEnv = jasmine.getEnv();
+            jasmineEnv.updateInterval = 1000;
 
-      jasmineEnv.addReporter(trivialReporter);
+            var trivialReporter = new jasmine.TrivialReporter();
 
-      jasmineEnv.specFilter = function(spec) {
-        return trivialReporter.specFilter(spec);
-      };
+            jasmineEnv.addReporter(trivialReporter);
 
-      var currentWindowOnload = window.onload;
+            jasmineEnv.specFilter = function (spec) {
+                return trivialReporter.specFilter(spec);
+            };
 
-      window.onload = function() {
-        if (currentWindowOnload) {
-          currentWindowOnload();
-        }
-        execJasmine();
-      };
+            var currentWindowOnload = window.onload;
 
-      function execJasmine() {
-        jasmineEnv.execute();
-      }
+            window.onload = function () {
+                if (currentWindowOnload) {
+                    currentWindowOnload();
+                }
+                execJasmine();
+            };
 
-    })();
-  </script>
+            function execJasmine() {
+                jasmineEnv.execute();
+            }
+
+        })();
+    </script>
 
 </head>
 
