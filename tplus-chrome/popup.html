@@ -2,27 +2,40 @@
 <html>
 <head>
     <style>
-        body {font-size: 14px;font-family: Arial}
-        #show_more_options {float:right; font-size:12px;margin-top: 5px;}
+        body {
+            font-size: 14px;
+            font-family: Arial
+        }
+
+        #show_more_options {
+            float: right;
+            font-size: 12px;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
 <h4>Hi, <span id="full_name"></span></h4>
+
 <p>
     What are your initials used in SCM log entries?
     <input type="text" id="initials" value=""/>
 </p>
+
 <p>
     When is the ending date of the time report?
     <input type="text" id="end_date" value="" readonly="readonly"/>
-    <button onclick="prev()">Prev</button><button onclick="next()">Next</button>
+    <button onclick="prev()">Prev</button>
+    <button onclick="next()">Next</button>
     <a id="show_more_options" href="javascript:;" onclick="showMoreOptions()">+More</a>
 </p>
 <p id="more_options" style="display: none;">
     Where is your repository to retrieve log entries?
-    <input type="text" id="repository_url" value="" />
+    <input type="text" id="repository_url" value=""/>
 </p>
 <button onclick="searchAndFill()">Generate Report</button>
+<button onclick="addHoliday()">Add Holiday</button>
+<button onclick="addSickLeave()">Add Sick Leave</button>
 <script type="text/javascript">
     var fullNameField = document.getElementById('full_name'),
             initialsField = document.getElementById('initials'),
@@ -51,17 +64,17 @@
     }
 
     function prev() {
-        endDate =  new Date(endDate.getTime() - 7 * MILLI_SECONDS_IN_ONE_DAY);
+        endDate = new Date(endDate.getTime() - 7 * MILLI_SECONDS_IN_ONE_DAY);
         endDateField.value = endDate.toDateString();
     }
 
     function next() {
-        endDate =  new Date(endDate.getTime() + 7 * MILLI_SECONDS_IN_ONE_DAY);
+        endDate = new Date(endDate.getTime() + 7 * MILLI_SECONDS_IN_ONE_DAY);
         endDateField.value = endDate.toDateString();
     }
 
     function searchAndFill() {
-        if(!initialsField.value) {
+        if (!initialsField.value) {
             initialsField.focus();
             return;
         }
@@ -69,9 +82,26 @@
         localStorage['tplus_initials_map'] = JSON.stringify(initialsMap);
         localStorage['tplus_repository_url'] = repositoryUrlField.value;
         chrome.tabs.sendRequest(getTabId(), {
-            "initials":initialsField.value,
-            "endDate":endDateField.value,
-            "repositoryUrl":repositoryUrlField.value
+            "action":"fillWorkRecords",
+            "params":{
+                "initials":initialsField.value,
+                "endDate":endDateField.value,
+                "repositoryUrl":repositoryUrlField.value
+            }
+        });
+    }
+
+    function addHoliday() {
+        chrome.tabs.sendRequest(getTabId(), {
+            "action":"addHolidayRecord",
+            "params": {}
+        });
+    }
+
+    function addSickLeave() {
+        chrome.tabs.sendRequest(getTabId(), {
+            "action":"addSickLeaveRecord",
+            "params": {}
         });
     }
 

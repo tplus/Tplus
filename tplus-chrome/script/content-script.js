@@ -2,12 +2,22 @@
     var BREATHE_DELAY = 200,
         DEFAULT_COUNTRY_ABBREVIATION = 'CHN',
         DEFAULT_ACTIVITY_CODE = 'PWC0001 TIGER MISC',
+        DEFAULT_HOLIDAY_CODE = 'TW_TOFF LEAVE PUBLIC_HOLIDAY',
+        DEFAULT_SICK_LEAVE_CODE = 'TW_TOFF SICK SICK_LV',
         DEFAULT_DAILY_WORKING_HOURS = 8,
         MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         DEFAULT_REPOSITORY_URL = 'http://10.18.5.147:1911/shortlog/tip?revcount=1000';
     var endDate;
 
     function noOp() {
+    }
+
+    function addTimeRecordWithCode(code) {
+        getFirstUnfilledTimeRecordAndThen(function (index) {
+            setTimeRecordFields({
+                code:code,
+                billable:false}, index);
+        });
     }
 
     function fillTimeReport(timeRecords, currentIndex) {
@@ -33,6 +43,28 @@
         return $(existingTimeRecordCountSelector).length - 2;
     }
 
+    function getFirstUnfilledTimeRecordIndex(rows) {
+        var index = -1;
+        for (var i = 0; i < rows.length; i++) {
+            var activity = $(rows[i]).find('input[id*="_activity"]');
+            if (activity && activity.length == 1 && !activity.val()) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
+    function getFirstUnfilledTimeRecordAndThen(callback) {
+        var rows = $('table:eq(1)>tbody>tr[id*="time_record_"]');
+        var index = getFirstUnfilledTimeRecordIndex(rows);
+        if (index != -1) {
+            callback(index);
+        } else {
+            addNewRowInTableAndThen(callback);
+        }
+    }
+
     function addNewRowInTableAndThen(callbackFn) {
         var timeRecordRowCount = getExistingTimeRecordRowCount(),
             addRowLinkSelector = '#add_row a',
@@ -43,7 +75,7 @@
 
     function waitUntilNewRowPresentAndThen(expectedNumOfRows, callbackFn) {
         if (getExistingTimeRecordRowCount() == expectedNumOfRows) {
-            (callbackFn || noOp)();
+            (callbackFn || noOp)(expectedNumOfRows - 1);
         }
         else {
             setTimeout(function () {
@@ -53,7 +85,7 @@
     }
 
     function fillTimeRecordAndContinue(timeRecords, currentIndex) {
-        setTimeRecordFields(timeRecords, currentIndex);
+        setTimeRecordFields(timeRecords[currentIndex], currentIndex);
         fillTimeReport(timeRecords, currentIndex + 1);
     }
 
@@ -68,12 +100,12 @@
         $(expenseRadioButtonSelector).click();
     }
 
-    function setTimeRecordFields(timeRecords, rowIndex) {
+    function setTimeRecordFields(timeRecord, rowIndex) {
         setCountry(rowIndex, DEFAULT_COUNTRY_ABBREVIATION);
-        setActivity(rowIndex, timeRecords[rowIndex].code);
-        setBillableStatus(rowIndex, timeRecords[rowIndex].billable);
-        setComment(rowIndex, timeRecords[rowIndex].comment);
-        setWorkingHours(rowIndex, timeRecords[rowIndex].dayOfWeek, DEFAULT_DAILY_WORKING_HOURS);
+        setActivity(rowIndex, timeRecord.code);
+        setBillableStatus(rowIndex, timeRecord.billable);
+        setComment(rowIndex, timeRecord.comment);
+        setWorkingHours(rowIndex, timeRecord.dayOfWeek, DEFAULT_DAILY_WORKING_HOURS);
     }
 
     function clearTimeRecordFields(rowIndex) {
@@ -114,7 +146,7 @@
     }
 
     function setWorkingHours(rowIndex, workingDay, workingHours) {
-        var getDayOfWeekTextBox = function(rowIndex, dayOfWeek) {
+        var getDayOfWeekTextBox = function (rowIndex, dayOfWeek) {
             var dayOfWeekTextBoxSelector = 'table:eq(1) tr:eq(' + (rowIndex + 1) + ') td:eq(' + (5 + dayOfWeek) + ') input';
             return $(dayOfWeekTextBoxSelector);
         };
@@ -133,12 +165,19 @@
     }
 
     function onRequest(request) {
-        if (!request || !request.initials || !request.endDate) return;
-        new TimeSheetRecords().load(request, function(records){
-            setEndDate(formatToTEDateString(new Date(request.endDate)));
-            setExpenseStatus(false);
-            fillTimeReport(records);
-        });
+        if (!request || !request.action || !request.params) return;
+        var params = request.params;
+        if (request.action == 'fillWorkRecords') {
+            new TimeSheetRecords().load(params, function (records) {
+                setEndDate(formatToTEDateString(new Date(params.endDate)));
+                setExpenseStatus(false);
+                fillTimeReport(records);
+            });
+        } else if (request.action == 'addHolidayRecord') {
+            addTimeRecordWithCode(DEFAULT_HOLIDAY_CODE);
+        } else if (request.action == 'addSickLeaveRecord') {
+            addTimeRecordWithCode(DEFAULT_SICK_LEAVE_CODE);
+        }
     }
 
     $(function () {
