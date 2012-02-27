@@ -4,13 +4,90 @@
     <style>
         body {
             font-size: 14px;
-            font-family: Arial
+            font-family: Arial;
+            width: 240px;
         }
 
-        #show_more_options {
+        dl, dt, dd, button, input {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        h4 {
+            margin: 10px 0;
+        }
+        
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #f60;
+            text-decoration: underline;
+        }
+
+        dl {
+            margin: 0px 0px 5px;
+            overflow: hidden;
+        }
+
+        dt {
+            float:left;
+        }
+
+        dd {
+            float:right;
+            width:160px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        button, input {
+            display: inline;
+            padding: 3px 3px;
+            border: 1px solid silver;
+        }
+
+        button:hover {
+            border: 1px solid #f90;
+            background-color: #fc0;
+        }
+
+        #initials, #repository_url {
+            width: 152px;
+        }
+
+        .date input {
+            width: 112px;
+        }
+
+        .date button {
+        }
+
+        #end_date {
+            text-align: center;
+        }
+
+        #generate_report {
             float: right;
-            font-size: 12px;
-            margin-top: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: Verdara;
+            padding: 2px 8px;
+            border: 1px solid #f90;
+            background-color: #fc0;
+        }
+
+        #actions {
+            text-align: center;
+        }
+
+        #actions a {
+            margin-right: 8px;
+            font-size: 13px;
         }
     </style>
     <script type="text/javascript">
@@ -20,28 +97,35 @@
     </script>
 </head>
 <body>
-<h4>Hi, <span id="full_name"></span></h4>
+<h4>Hi <span id="full_name"></span></h4>
 
-<p>
-    What are your initials used in SCM log entries?
-    <input type="text" id="initials" value=""/>
-</p>
+<dl>
+    <dt><label for="initials">Hg Alias:</label></dt>
+    <dd><input type="text" id="initials" placeholder="initials" value=""/></dd>
+</dl>
 
-<p>
-    When is the ending date of the time report?
-    <input type="text" id="end_date" value="" readonly="readonly"/>
-    <button onclick="prev()">Prev</button>
-    <button onclick="next()">Next</button>
-    <a id="show_more_options" href="javascript:;" onclick="showMoreOptions()">+More</a>
-</p>
-<p id="more_options" style="display: none;">
-    Where is your repository to retrieve log entries?
-    <input type="text" id="repository_url" value=""/>
-</p>
-<button onclick="searchAndFill()">Generate Report</button>
-<button onclick="addTimeRecord(DEFAULT_SICK_LEAVE_CODE)">+1 Sick Leave</button>
-<button onclick="addTimeRecord(DEFAULT_ANNUAL_LEAVE_CODE)">+1 Annual Leave</button>
-<button onclick="addTimeRecord(DEFAULT_HOLIDAY_CODE)">+1 Holiday</button>
+<dl>
+    <dt><label>End Date:</label></dt>
+    <dd class="date">
+        <button onclick="prev()">&lt;</button>
+        <input type="text" id="end_date" value="" readonly="readonly"/>
+        <button onclick="next()">&gt;</button>
+    </dd>
+</dl>
+
+<dl id="more_options">
+    <dt><label for="repository_url">Repo Url:</label></dt>
+    <dd><input type="text" placeholder="Default Repository Url" id="repository_url" value=""/></dd>
+</dl>
+
+<dl>
+    <button id="generate_report" onclick="searchAndFill()">Generate Report</button>
+</dl>
+<div id="actions">
+    <a href="javascript:void(0)" onclick="addTimeRecord(DEFAULT_SICK_LEAVE_CODE)">+1 Sick Lv</a>
+    <a href="javascript:void(0)" onclick="addTimeRecord(DEFAULT_ANNUAL_LEAVE_CODE)">+1 Annual Lv</a>
+    <a href="javascript:void(0)" onclick="addTimeRecord(DEFAULT_HOLIDAY_CODE)">+1 Holiday</a>
+</div>
 <script type="text/javascript">
     var fullNameField = document.getElementById('full_name'),
             initialsField = document.getElementById('initials'),
