@@ -13,6 +13,11 @@
             margin-top: 5px;
         }
     </style>
+    <script type="text/javascript">
+        var DEFAULT_HOLIDAY_CODE = 'TW_TOFF LEAVE PUBLIC_HOLIDAY',
+                DEFAULT_ANNUAL_LEAVE_CODE = 'TW_TOFF LEAVE ANNUAL_LV',
+                DEFAULT_SICK_LEAVE_CODE = 'TW_TOFF SICK SICK_LV';
+    </script>
 </head>
 <body>
 <h4>Hi, <span id="full_name"></span></h4>
@@ -34,8 +39,9 @@
     <input type="text" id="repository_url" value=""/>
 </p>
 <button onclick="searchAndFill()">Generate Report</button>
-<button onclick="addHoliday()">Add Holiday</button>
-<button onclick="addSickLeave()">Add Sick Leave</button>
+<button onclick="addTimeRecord(DEFAULT_SICK_LEAVE_CODE)">+1 Sick Leave</button>
+<button onclick="addTimeRecord(DEFAULT_ANNUAL_LEAVE_CODE)">+1 Annual Leave</button>
+<button onclick="addTimeRecord(DEFAULT_HOLIDAY_CODE)">+1 Holiday</button>
 <script type="text/javascript">
     var fullNameField = document.getElementById('full_name'),
             initialsField = document.getElementById('initials'),
@@ -91,17 +97,17 @@
         });
     }
 
-    function addHoliday() {
+    function addTimeRecord(code) {
         chrome.tabs.sendRequest(getTabId(), {
-            "action":"addHolidayRecord",
-            "params": {}
+            "action":"addTimeRecord",
+            "params":{"code":code}
         });
     }
 
     function addSickLeave() {
         chrome.tabs.sendRequest(getTabId(), {
             "action":"addSickLeaveRecord",
-            "params": {}
+            "params":{}
         });
     }
 

@@ -1,23 +1,36 @@
 (function () {
     var BREATHE_DELAY = 200,
         DEFAULT_COUNTRY_ABBREVIATION = 'CHN',
-        DEFAULT_ACTIVITY_CODE = 'PWC0001 TIGER MISC',
         DEFAULT_HOLIDAY_CODE = 'TW_TOFF LEAVE PUBLIC_HOLIDAY',
+        DEFAULT_ANNUAL_LEAVE_CODE = 'TW_TOFF LEAVE ANNUAL_LV',
         DEFAULT_SICK_LEAVE_CODE = 'TW_TOFF SICK SICK_LV',
         DEFAULT_DAILY_WORKING_HOURS = 8,
         MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        DEFAULT_REPOSITORY_URL = 'http://10.18.5.147:1911/shortlog/tip?revcount=1000';
-    var endDate;
+        CODE_TO_COMMENT_MAP = buildCodeToCommentMap();
 
     function noOp() {
+    }
+
+    function buildCodeToCommentMap() {
+        var codeToCommentMap = {};
+        codeToCommentMap[DEFAULT_HOLIDAY_CODE] = "public holiday";
+        codeToCommentMap[DEFAULT_ANNUAL_LEAVE_CODE] = "annual leave";
+        codeToCommentMap[DEFAULT_SICK_LEAVE_CODE] = "sick leave";
+        return codeToCommentMap;
     }
 
     function addTimeRecordWithCode(code) {
         getFirstUnfilledTimeRecordAndThen(function (index) {
             setTimeRecordFields({
                 code:code,
+                comment:getDefaultComment(code),
                 billable:false}, index);
         });
+    }
+
+    function getDefaultComment(code) {
+        var comment = CODE_TO_COMMENT_MAP[code] || "";
+        return comment;
     }
 
     function fillTimeReport(timeRecords, currentIndex) {
@@ -173,10 +186,8 @@
                 setExpenseStatus(false);
                 fillTimeReport(records);
             });
-        } else if (request.action == 'addHolidayRecord') {
-            addTimeRecordWithCode(DEFAULT_HOLIDAY_CODE);
-        } else if (request.action == 'addSickLeaveRecord') {
-            addTimeRecordWithCode(DEFAULT_SICK_LEAVE_CODE);
+        } else if (request.action == 'addTimeRecord') {
+            addTimeRecordWithCode(request.params['code']);
         }
     }
 
