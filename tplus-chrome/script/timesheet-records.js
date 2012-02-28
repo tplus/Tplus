@@ -16,7 +16,7 @@ TimeSheetRecords.prototype = {
     },
 
     merge:function (logs, holidays) {
-        //ToDo remove duplicate records
+        //ToDo remove duplicate records if checked in public holiday that will be ignored.
         return holidays.concat(logs).sort(function (item1, item2) {
             return item1.dayOfWeek > item2.dayOfWeek;
         });
