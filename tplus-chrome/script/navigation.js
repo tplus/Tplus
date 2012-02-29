@@ -1,0 +1,1 @@
+window.location.href="https://te.thoughtworks.com/time_sheets/new";
