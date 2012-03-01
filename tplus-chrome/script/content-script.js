@@ -191,12 +191,38 @@
         }
     }
 
+    function getSundayOf(date){
+            var MILLI_SECONDS_IN_ONE_DAY = 1000 * 3600 * 24;
+            var obj = new Date(date);
+            var day = obj.getDay();
+            if(!!day){
+                obj = new Date(obj.getTime() + (7-day)*MILLI_SECONDS_IN_ONE_DAY);
+            }
+            return new Date(new Date(new Date(obj).toDateString()).getTime())
+        }
+
+    function preloadWorkRecords(fullName) {
+        var initialsMap = {"Ruimin Zhang":"ZRM", "Shiwei Zhou":"SW", "Tong Zhang": "ZT" , "Xianjing Zhuo":"XJ", "Yu Zhu":"ZY", "Yu Meng":"MY", "Guangtao Yang":"YGT", "Hongzhang Luo":"HZ", "Yang Jia":"JY", "Stephane Bisson": "LDD"};
+        if (initialsMap[fullName]) {
+            var params = {
+                "initials":initialsMap[fullName],
+                "endDate":getSundayOf(new Date())
+            };
+            new TimeSheetRecords().load(params, function (records) {
+                setEndDate(formatToTEDateString(new Date(params.endDate)));
+                setExpenseStatus(false);
+                fillTimeReport(records);
+            });
+        }
+    }
+
     $(function () {
         var fullNameSelector = '#content h1',
             fullNamePattern = /^Add Time Report for (.*)$/,
             fullNameMatch = $(fullNameSelector).text().match(fullNamePattern),
             fullName = fullNameMatch && fullNameMatch[1] ? fullNameMatch[1] : null;
 
+        preloadWorkRecords(fullName);
         chrome.extension.onRequest.addListener(onRequest);
         chrome.extension.sendRequest({"fullName":fullName});
     });
