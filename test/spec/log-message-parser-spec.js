@@ -1,5 +1,5 @@
 describe("hg log parser to timesheet record comment", function () {
-    var commentHelper = new LogMessageHelper();
+    var commentHelper = new LogMessageParser();
 
     it("should return true and correct story number given a valid log", function () {
         var logs = [
@@ -11,26 +11,26 @@ describe("hg log parser to timesheet record comment", function () {
 
         _.each(logs, function(log){
             _.each(log.expectedUsers, function(user){
-                expect(commentHelper.isCheckedInBy(log.description, user)).toBeTruthy();
+                expect(commentHelper._isCheckedInBy(log.description, user)).toBeTruthy();
             })
-            expect(commentHelper.extractStoryOrDefectOrTaskNumber(log.description)).toBe(log.expectedNumber);
+            expect(commentHelper._extractStoryOrDefectOrTaskNumber(log.description)).toBe(log.expectedNumber);
         })
     });
 
     it("should return false given a invalid log without user name", function () {
         var log = "#74 assignee autocomplete";
-        expect(commentHelper.isCheckedInBy(log)).toBeFalsy();
+        expect(commentHelper._isCheckedInBy(log)).toBeFalsy();
 
     });
 
     it("should return false with user name in wrong format", function () {
         var log = "XJ&ZRM #74 assignee autocomplete";
-        expect(commentHelper.isCheckedInBy(log)).toBeFalsy();
+        expect(commentHelper._isCheckedInBy(log)).toBeFalsy();
     });
 
     it("should return false given a invalid log with user name in wrong format", function () {
         var log = "XJ&ZRM #74 assignee autocomplete";
-        expect(commentHelper.isCheckedInBy(log)).toBeFalsy();
+        expect(commentHelper._isCheckedInBy(log)).toBeFalsy();
 
     });
 
@@ -42,7 +42,7 @@ describe("hg log parser to timesheet record comment", function () {
             "[XJ&ZRM] NA fix build"
         ];
         _.each(logs, function (log) {
-            expect(commentHelper.extractStoryOrDefectOrTaskNumber(log)).toBe("");
+            expect(commentHelper._extractStoryOrDefectOrTaskNumber(log)).toBe("");
         })
 
     });
