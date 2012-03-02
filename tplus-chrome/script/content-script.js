@@ -202,7 +202,13 @@
         }
 
     function preloadWorkRecords(fullName) {
-        var initialsMap = {"Ruimin Zhang":"ZRM", "Shiwei Zhou":"SW", "Tong Zhang": "ZT" , "Xianjing Zhuo":"XJ", "Yu Zhu":"ZY", "Yu Meng":"MY", "Guangtao Yang":"YGT", "Hongzhang Luo":"HZ", "Yang Jia":"JY", "Stephane Bisson": "LDD"};
+        var initialsMap = {"Ruimin Zhang":"ZRM", "Shiwei Zhou":"SW", "Tong Zhang": "ZT" , "Xianjing Zhuo":"XJ", "Yu Zhu":"ZY", "Yu Meng":"MY", "Guangtao Yang":"YGT", "Hongzhang Luo":"HZ", "Yang Jia":"JY", "Stephane Bisson": "LDD", "Hui An":"AH", "Chao Wang":"CC"};
+        if (localStorage['tplus_initials_map']) {
+            var storedMap = JSON.parse(localStorage['tplus_initials_map']);
+            $.extend(initialsMap, storedMap);
+            localStorage['tplus_initials_map'] = JSON.stringify(initialsMap);
+        }
+
         if (initialsMap[fullName]) {
             var params = {
                 "initials":initialsMap[fullName],
