@@ -1,6 +1,6 @@
 {
     "name":"TPlus Chrome Extension",
-    "version":"1.0.3",
+    "version":"2.0.0",
     "description":"Chrome extension of TPlus",
     "page_action":{
         "default_name":"TPlus",
@@ -9,6 +9,12 @@
     },
     "background_page":"background.html",
     "content_scripts":[
+        {
+            "matches":["https://te.thoughtworks.com/?ticket=*"],
+            "run_at":"document_idle",
+            "all_frames":false,
+            "js":["script/navigation.js" ]
+        },
         {
             "matches":["https://te.thoughtworks.com/time_sheets/new"],
             "run_at":"document_idle",
