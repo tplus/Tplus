@@ -4,28 +4,28 @@ function TimesheetRecordsConverter() {
 }
 
 TimesheetRecordsConverter.prototype = {
-    convert:function (entries) {
+    convert:function (logMessages) {
         var self = this;
-        var workingDays = _.sortBy(_.uniq(_.map(entries, function (entry) {
-            return entry.dayOfWeek;
+        var workingDays = _.sortBy(_.uniq(_.map(logMessages, function (logMessage) {
+            return logMessage.dayOfWeek;
         })), function (day) {
             return day;
         });
         return _.map(workingDays, function (day) {
-            var entriesInWorkingDays = _.filter(entries, function (entry) {
-                return entry.dayOfWeek == day;
+            var logsCheckedInSameDay = _.filter(logMessages, function (logMessage) {
+                return logMessage.dayOfWeek == day;
             });
             return  {'dayOfWeek':day,
-                'comment':self.extractNumbers(entriesInWorkingDays),
+                'comment':self._mergeNumbersInSameDay(logsCheckedInSameDay),
                 'code':self.TIGER_ACTIVITY_CODE,
                 'billable':true
             };
         });
     },
-    extractNumbers:function (entries) {
+    _mergeNumbersInSameDay:function (logMessages) {
         var comments = [];
-        _.each(entries, function (entry) {
-            var comment = entry.comment;
+        _.each(logMessages, function (logMessage) {
+            var comment = logMessage.cardNumberOfCheckin;
             if (!!comment && comments.indexOf(comment) == -1) {
                 comments.push(comment);
             }

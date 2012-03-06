@@ -1,7 +1,7 @@
 function LogMessageParser() {
     //this.logDescriptionPattern = /^\[(.*)\]\s*(#r{0,1}\d+)*/;
     this.logUserNamesPattern = /^\[(.*)\]/;
-    this.logNumberPattern = /#r{0,1}\d+/;
+    this.cardNumberOfCheckin = /#r{0,1}\d+/;
 }
 
 LogMessageParser.prototype = {
@@ -11,10 +11,10 @@ LogMessageParser.prototype = {
         $(data).find(".bigtable tr").each(function(i, v) {
             var logDate = $(v).find('.date').text();
             var description = $(v).find('.description a').text();
-            if (dateUtil.isInSameWeek(logDate, endDateOfWeek) && self.commentHelper._isCheckedInBy(description, name)) {
+            if (dateUtil.isInSameWeek(logDate, endDateOfWeek) && self._isCheckedInBy(description, name)) {
                 result.push({
                     'dayOfWeek' : dateUtil.getNumberOfDay(logDate),
-                    'comment': self._extractStoryOrDefectOrTaskNumber(description)
+                    "cardNumberOfCheckin": self._extractStoryOrDefectOrTaskNumber(description)
                 });
             }
         });
@@ -29,7 +29,7 @@ LogMessageParser.prototype = {
         return false;
     },
     _extractStoryOrDefectOrTaskNumber: function(description){
-        var result = description.toLowerCase().match(this.logNumberPattern);
+        var result = description.toLowerCase().match(this.cardNumberOfCheckin);
         if(!!result){
             return result[0];
         }
