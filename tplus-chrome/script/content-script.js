@@ -230,6 +230,6 @@
 
         preloadWorkRecords(fullName);
         chrome.extension.onRequest.addListener(onRequest);
-        chrome.extension.sendRequest({"fullName":fullName});
+        chrome.extension.sendRequest({"fullName":fullName, "aliasProposals":guessAlias(fullName)});
     });
 })();

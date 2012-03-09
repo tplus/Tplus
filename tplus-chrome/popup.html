@@ -142,6 +142,7 @@
 
     fullNameField.innerText = queryOption.fullName;
     initialsField.value = initialsMap[queryOption.fullName] || '';
+    initialsField.placeholder = queryOption.aliasProposals || '';
     endDateField.value = endDate.toDateString();
     repositoryUrlField.value = localStorage['tplus_repository_url'] || '';
 

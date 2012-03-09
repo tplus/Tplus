@@ -20,7 +20,20 @@
             "run_at":"document_idle",
             "all_frames":false,
             "css":["css/tplus.css"],
-            "js":["lib/jquery-1.7.1.min.js", "lib/underscore.js", "script/date-util.js","script/timesheet-records.js", "script/public-holidays.js", "script/timesheet-converter.js", "script/log-message-parser.js", "script/log-repository.js", "script/content-script.js" ]
+            "js":[
+                "lib/jquery-1.7.1.min.js",
+                "lib/underscore.js",
+                "lib/antlr3-all-min.js",
+                "script/date-util.js",
+                "script/timesheet-records.js",
+                "script/public-holidays.js",
+                "script/timesheet-converter.js",
+                "script/log-message-parser.js",
+                "script/log-repository.js",
+                "script/pinyin-lexer.js",
+                "script/pinyin-parser.js",
+                "script/name.js",
+                "script/content-script.js" ]
         }
     ],
     "permissions":[
