@@ -1,10 +1,10 @@
-function TimesheetRecordsConverter() {
+function TimesheetRecordsBuilder() {
     this.TIGER_ACTIVITY_CODE = 'PWC0001 TIGER MISC';
     this.daysOfWeek = [1, 2, 3, 4, 5, 6, 7];
 }
 
-TimesheetRecordsConverter.prototype = {
-    convert:function (logMessages) {
+TimesheetRecordsBuilder.prototype = {
+    build:function (logMessages, projectCode) {
         var self = this;
         var workingDays = _.sortBy(_.uniq(_.map(logMessages, function (logMessage) {
             return logMessage.dayOfWeek;
@@ -17,7 +17,7 @@ TimesheetRecordsConverter.prototype = {
             });
             return  {'dayOfWeek':day,
                 'comment':self._mergeNumbersInSameDay(logsCheckedInSameDay),
-                'code':self.TIGER_ACTIVITY_CODE,
+                'code':projectCode,
                 'billable':true
             };
         });
