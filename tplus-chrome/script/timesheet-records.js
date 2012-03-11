@@ -29,7 +29,7 @@ TimeSheetRecords.prototype = {
         var loadLogsFromMultipleRepoFns = [];
         _.each(repositories, function(repo) {
             var loadLogsFn = function(callback) {
-                new LogRepository().findBy(repo.url, criteria.initials, criteria.endDate, function(data) {
+                new LogRepository().findBy(repo.url, criteria.aliases, criteria.endDate, function(data) {
                     var logRecords = new TimesheetRecordsBuilder(data, repo.code, self.DEFAULT_BILLABLE).toRecords();
                     callback(logRecords);
                 })

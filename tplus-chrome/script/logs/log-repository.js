@@ -4,11 +4,11 @@ function LogRepository() {
 }
 
 LogRepository.prototype = {
-    findBy: function(url, userName, endDate, onSuccess){
+    findBy: function(url, userNames, endDate, onSuccess){
         var self = this;
         url = "http://"+ url.concat(self.DEFAULT_HG_WEB_API_PATH);
         jQuery.get(url, function(logsInHtmlFormat) {
-            var logs = self.parser.parse(userName, endDate, logsInHtmlFormat);
+            var logs = self.parser.parse(userNames, endDate, logsInHtmlFormat);
             onSuccess(logs);
         });
     }

@@ -4,7 +4,7 @@ describe("timesheet record builder for parsed hg log entries", function () {
             {"dayOfWeek":4, "cardNumberOfCheckin":"#74"}
         ];
         var result = new TimesheetRecordsBuilder(logs, "", false).toRecords();
-        expect(result).toNotBe(null);
+        expect(result).not.toBe(null);
         expect(result.length).toBe(1);
         expect(result[0].dayOfWeek).toBe(4);
         expect(result[0].comment).toBe("#74");
@@ -16,7 +16,7 @@ describe("timesheet record builder for parsed hg log entries", function () {
             {"dayOfWeek":4, "cardNumberOfCheckin":"#74"}
         ];
         var result = new TimesheetRecordsBuilder(logs, "", false).toRecords();
-        expect(result).toNotBe(null);
+        expect(result).not.toBe(null);
         expect(result.length).toBe(1);
         expect(result[0].comment).toBe("#74");
     });
@@ -29,7 +29,7 @@ describe("timesheet record builder for parsed hg log entries", function () {
             {"dayOfWeek":4, "cardNumberOfCheckin":"#461"}
         ];
         var result = new TimesheetRecordsBuilder(logs, "", false).toRecords();
-        expect(result).toNotBe(null);
+        expect(result).not.toBe(null);
         expect(result.length).toBe(1);
         expect(result[0].comment).toBe("#74,#745,#461");
     });

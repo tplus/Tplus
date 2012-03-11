@@ -1,2 +1,25 @@
-.tplus_header {position:fixed;top:0;left:0;width:100%;text-align:center;z-index:99999;}
-.tplus_msg {font-size:14px;width:400px;margin:0 auto;line-height:30px;color:black;background:white;border:1px gray solid;}
+.tplus-message {
+    position: fixed !important;
+    top: 0 !important;
+    left: 50% !important;
+    width: 300px !important;
+    margin: 3px 0 0 -150px !important;
+    padding: 4px 10px !important;
+    border: 1px silver solid !important;
+    border-radius: 8px !important;
+    color: #333 !important;
+    background-color: white !important;
+    font-size: 14px !important;
+    text-align: left !important;
+}
+.tplus-message a {
+    background-color: white !important;
+    color: #00c !important;
+    text-decoration: none !important;
+}
+.tplus-message a:hover {
+    color: #f60 !important;
+}
+.tplus-message a.selected {
+    text-decoration: underline !important;
+}

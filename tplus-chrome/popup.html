@@ -1,95 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        body {
-            font-size: 14px;
-            font-family: Arial;
-            width: 240px;
-        }
-
-        dl, dt, dd, button, input {
-            margin: 0px;
-            padding: 0px;
-        }
-
-        h4 {
-            margin: 10px 0;
-        }
-
-        a {
-            color: #333;
-            text-decoration: none;
-        }
-
-        a:hover {
-            color: #f60;
-            text-decoration: underline;
-        }
-
-        dl {
-            margin: 0px 0px 5px;
-            overflow: hidden;
-        }
-
-        dt {
-            float: left;
-        }
-
-        dd {
-            float: right;
-            width: 160px;
-        }
-
-        button {
-            cursor: pointer;
-        }
-
-        button, input {
-            display: inline;
-            padding: 3px 3px;
-            border: 1px solid silver;
-        }
-
-        button:hover {
-            border: 1px solid #f90;
-            background-color: #fc0;
-        }
-
-        #initials, #repository_url, #project_code {
-            width: 152px;
-        }
-
-        .date input {
-            width: 112px;
-        }
-
-        .date button {
-        }
-
-        #end_date {
-            text-align: center;
-        }
-
-        #generate_report {
-            float: right;
-            font-size: 16px;
-            font-weight: bold;
-            font-family: Verdara;
-            padding: 2px 8px;
-            border: 1px solid #f90;
-            background-color: #fc0;
-        }
-
-        #actions {
-            text-align: center;
-        }
-
-        #actions a {
-            margin-right: 8px;
-            font-size: 13px;
-        }
-    </style>
+    <link type="text/css" rel="stylesheet" href="css/tplus-popup.css" />
     <script type="text/javascript">
         var DEFAULT_HOLIDAY_CODE = 'TW_TOFF LEAVE PUBLIC_HOLIDAY',
                 DEFAULT_ANNUAL_LEAVE_CODE = 'TW_TOFF LEAVE ANNUAL_LV',
@@ -101,7 +13,7 @@
 
 <dl>
     <dt><label for="initials">Hg Alias:</label></dt>
-    <dd><input type="text" id="initials" placeholder="initials" value=""/></dd>
+    <dd><input type="text" id="initials" placeholder="Your Alias in Hg Log" value=""/></dd>
 </dl>
 
 <dl>
@@ -136,13 +48,14 @@
     <a href="javascript:void(0)" onclick="addTimeRecord(DEFAULT_HOLIDAY_CODE)">+1 Holiday</a>
 </div>
 <script type="text/javascript">
-    var fullNameField = document.getElementById('full_name'),
+    var localCache = chrome.extension.getBackgroundPage().localStorage,
+            fullNameField = document.getElementById('full_name'),
             initialsField = document.getElementById('initials'),
             endDateField = document.getElementById('end_date'),
             repositoryUrlField = document.getElementById('repository_url'),
             projectCodeField = document.getElementById('project_code'),
             queryOption = getQueryOption(),
-            initialsMap = JSON.parse(localStorage['tplus_initials_map'] || '{}'),
+            initialsMap = JSON.parse(localCache['tplus_initials_map'] || '{}'),
             MILLI_SECONDS_IN_ONE_DAY = 1000 * 3600 * 24,
             today = new Date(),
             dayOfWeek = today.getDay() == 0 ? 7 : today.getDay(),
@@ -152,10 +65,9 @@
 
     fullNameField.innerText = queryOption.fullName;
     initialsField.value = initialsMap[queryOption.fullName] || '';
-    initialsField.placeholder = queryOption.aliasProposals || '';
     endDateField.value = endDate.toDateString();
-    repositoryUrlField.value = localStorage['tplus_repository_url'] || '';
-    projectCodeField.value = localStorage['tplus_project_code'] || '';
+    repositoryUrlField.value = localCache['tplus_repository_url'] || '';
+    projectCodeField.value = localCache['tplus_project_code'] || '';
 
     function getQueryOption() {
         return chrome.extension.getBackgroundPage()['queryOption'];
@@ -181,13 +93,13 @@
             return;
         }
         initialsMap[fullNameField.innerText] = initialsField.value;
-        localStorage['tplus_initials_map'] = JSON.stringify(initialsMap);
-        localStorage['tplus_repository_url'] = repositoryUrlField.value;
-        localStorage['tplus_project_code'] = projectCodeField.value;
+        localCache['tplus_initials_map'] = JSON.stringify(initialsMap);
+        localCache['tplus_repository_url'] = repositoryUrlField.value;
+        localCache['tplus_project_code'] = projectCodeField.value;
         chrome.tabs.sendRequest(getTabId(), {
             "action":"fillWorkRecords",
             "params":{
-                "initials":initialsField.value,
+                "aliases":initialsField.value,
                 "endDate":endDateField.value,
                 "repositoryUrl":repositoryUrlField.value,
                 "projectCode":projectCodeField.value

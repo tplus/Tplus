@@ -54,6 +54,5 @@ function guessAlias(fullName) {
         patterns = _.map(aliasPatternsFns, function(aliasPatternFn) { return aliasPatternFn(charactersInPinyin)}),
         proposals = [];
     _.each(patterns, function(pattern) {proposals = proposals.concat(pattern)});
-    console.log(proposals);
     return proposals;
 }
