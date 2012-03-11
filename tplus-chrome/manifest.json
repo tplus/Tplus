@@ -26,14 +26,17 @@
                 "lib/antlr3-all-min.js",
                 "script/date-util.js",
                 "script/timesheet-records.js",
-                "script/timesheet-builder.js",
                 "script/holiday/public-holidays.js",
+                "script/logs/timesheet-builder-for-logs.js",
                 "script/logs/log-message-parser.js",
                 "script/logs/log-repository.js",
                 "script/name/pinyin-lexer.js",
                 "script/name/pinyin-parser.js",
                 "script/name/name.js",
-                "script/content-script.js" ]
+                "script/content-script.js",
+                "script/tplus-async-parallel.js",
+                "script/records-merger.js"
+            ]
         }
     ],
     "permissions":[

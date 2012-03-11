@@ -1,23 +1,25 @@
-function TimesheetRecordsBuilder() {
-    this.DEFAULT_BILLABLE = false;
+function TimesheetRecordsBuilder(logMessages, code, isBillable) {
+    this.logMessages = logMessages;
+    this.code = code;
+    this.isBillable = isBillable;
 }
 
 TimesheetRecordsBuilder.prototype = {
-    toRecords: function(logMessages, projectCode, isBillable) {
+    toRecords: function() {
         var self = this;
-        var workingDays = _.sortBy(_.uniq(_.map(logMessages, function (logMessage) {
+        var workingDays = _.sortBy(_.uniq(_.map(self.logMessages, function (logMessage) {
             return logMessage.dayOfWeek;
         })), function (day) {
             return day;
         });
         return _.map(workingDays, function (day) {
-            var logsCheckedInSameDay = _.filter(logMessages, function (logMessage) {
+            var logsCheckedInSameDay = _.filter(self.logMessages, function (logMessage) {
                 return logMessage.dayOfWeek == day;
             });
             return  {'dayOfWeek':day,
                 'comment':self._mergeNumbersInSameDay(logsCheckedInSameDay),
-                'code': projectCode,
-                'billable': isBillable
+                'code': self.code,
+                'billable': self.isBillable
             };
         });
     },

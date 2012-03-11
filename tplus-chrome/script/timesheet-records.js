@@ -1,23 +1,47 @@
 function TimeSheetRecords() {
     this.TIGER_REPOSITORY_URL = "10.18.5.147:1911";
     this.TIGER_ACTIVITY_CODE = 'PWC0001 TIGER MISC';
+    this.TIGER_REPOSITORIES =  [
+                {"url" : "10.18.5.147:1911", "code" : "PWC0001 TIGER MISC"}
+            ];
+    this.DEFAULT_BILLABLE = true;
     this.logRepository = new LogRepository();
     this.publicHolidays = new PublicHolidays();
-    this.converter = new TimesheetRecordsBuilder();
 }
 
 TimeSheetRecords.prototype = {
     load:function (criteria, callback) {
         var self = this;
         var holidays = self.publicHolidays.findBy(criteria.endDate);
-        var repoUrl = !criteria.repositoryUrl ? this.TIGER_REPOSITORY_URL : criteria.repositoryUrl;
-        var projectCode = !criteria.projectCode ? this.TIGER_ACTIVITY_CODE : criteria.projectCode;
-        self.logRepository.findBy(repoUrl, criteria.initials, criteria.endDate, function(data){
-            var logRecords = self.converter.toRecords(data, projectCode, self.DEFAULT_BILLABLE);
-            callback(self.merge(logRecords, holidays));
-        })
+        self.getRecords(criteria, function(records){
+            callback(self.merge(records,holidays));
+        });
     },
+    getRecords:function (criteria, callback) {
+        var self = this;
+        var repositories =  self.TIGER_REPOSITORIES;
+        if(criteria.repositoryUrl){
+            repositories[0].url = criteria.repositoryUrl;
+        }
+        if(criteria.projectCode){
+            repositories[0].code = criteria.projectCode;
+        }
+        var loadLogsFromMultipleRepoFns = [];
+        _.each(repositories, function(repo) {
+            var loadLogsFn = function(callback) {
+                new LogRepository().findBy(repo.url, criteria.initials, criteria.endDate, function(data) {
+                    var logRecords = new TimesheetRecordsBuilder(data, repo.code, self.DEFAULT_BILLABLE).toRecords();
+                    callback(logRecords);
+                })
+            };
+            loadLogsFromMultipleRepoFns.push(loadLogsFn);
+        });
 
+        tplusAsync.parallel(loadLogsFromMultipleRepoFns, function(logs) {
+            callback(new RecordsMerger().merge(logs));
+        });
+
+    },
     merge:function (logs, holidays) {
         //ToDo remove duplicate records if checked in public holiday that will be ignored.
         return holidays.concat(logs).sort(function (item1, item2) {
