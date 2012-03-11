@@ -27,7 +27,7 @@
                 "script/date-util.js",
                 "script/timesheet-records.js",
                 "script/public-holidays.js",
-                "script/timesheet-converter.js",
+                "script/timesheet-builder.js",
                 "script/log-message-parser.js",
                 "script/log-repository.js",
                 "script/pinyin-lexer.js",

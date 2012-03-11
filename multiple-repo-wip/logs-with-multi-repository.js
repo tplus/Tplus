@@ -1,5 +1,5 @@
 function LogsWithMultiRepository() {
-    this.DEFAULT_REPOSITORY_URL = 'http://10.18.5.147:1911/shortlog/tip?revcount=1000';
+    this.TIGER_REPOSITORY_URL = 'http://10.18.5.147:1911/shortlog/tip?revcount=1000';
     this.parser = new LogMessageParser();
 }
 
