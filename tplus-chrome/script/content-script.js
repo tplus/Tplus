@@ -194,27 +194,35 @@
         return endDate;
     }
 
+    function isGuessingAlias(searchParams) {
+        return searchParams.aliases instanceof Array && searchParams.aliases.length > 1;
+    }
+
+    function showAliasGuessingMessage(searchParams) {
+        var message = $('<div class="tplus-message"></div>');
+        message.append('<p>T+ thinks that your alias might be: </p>');
+        var innerLinks = [];
+        _.each(searchParams.aliases, function (alias) {
+            innerLinks.push('<a class="tplus-alias" href="javascript:void(0);">' + alias + '</a>');
+        });
+        message.append(innerLinks.join(", "));
+        $(message).delegate('a', 'click', function (e) {
+            $(message).find('a.tplus-alias').removeClass("selected");
+            $(this).addClass("selected");
+            chrome.extension.sendRequest({"fullName":getFullName(), "aliases":$(this).text()});
+        });
+        message.append('<p>So, which are you?</p>');
+        $('.tplus-message').remove();
+        $('body').append(message);
+    }
+
     function retrieveLogEntriesAndFillTimeReport(searchParams) {
         new TimeSheetRecords().load(searchParams, function (records) {
             setEndDate(formatToTEDateString(new Date(searchParams.endDate)));
             setExpenseStatus(false);
             fillTimeReport(records);
-            if(searchParams.aliases instanceof Array && searchParams.aliases.length > 1) {
-                var imgUrl = chrome.extension.getURL("/image/tplus.png"),
-                    message = $('<div class="tplus-message"></div>');
-                message.append('<p>T+ thinks that your alias might be: </p>');
-                var innerLinks = [];
-                _.each(searchParams.aliases, function(alias) {
-                    innerLinks.push('<a class="tplus-alias" href="javascript:void(0);">' + alias + '</a>');
-                });
-                message.append(innerLinks.join(", "));
-                $(message).delegate('a', 'click', function(e) {
-                    $(message).find('a.tplus-alias').removeClass("selected");
-                    $(this).addClass("selected");
-                    chrome.extension.sendRequest({"fullName":getFullName(), "aliases":$(this).text()});
-                });
-                message.append('<p>So, which are you?</p>');
-                $('body').append(message);
+            if(isGuessingAlias(searchParams)) {
+                showAliasGuessingMessage(searchParams);
             }
         });
     }
