@@ -1,7 +1,7 @@
 describe("timesheet record convert for parsed hg log entries", function () {
     it("should return correct timesheet record given one valid log", function () {
         var logs = [
-            {"dayOfWeek":4, "comment":"#74"}
+            {"dayOfWeek":4, "cardNumberOfCheckin":"#74"}
         ];
         var result = new TimesheetRecordsBuilder().toRecords(logs, "", false);
         expect(result).toNotBe(null);
@@ -12,8 +12,8 @@ describe("timesheet record convert for parsed hg log entries", function () {
 
     it("should return correct timesheet record given two duplicate valid logs in same day", function () {
         var logs = [
-            {"dayOfWeek":4, "comment":"#74"},
-            {"dayOfWeek":4, "comment":"#74"}
+            {"dayOfWeek":4, "cardNumberOfCheckin":"#74"},
+            {"dayOfWeek":4, "cardNumberOfCheckin":"#74"}
         ];
         var result = new TimesheetRecordsBuilder().toRecords(logs, "", false);
         expect(result).toNotBe(null);
@@ -23,10 +23,10 @@ describe("timesheet record convert for parsed hg log entries", function () {
 
     it("should return correct timesheet record given multiple logs in one day", function () {
         var logs = [
-            {"dayOfWeek":4, "comment":"#74"},
-            {"dayOfWeek":4, "comment":"#74"},
-            {"dayOfWeek":4, "comment":"#745"},
-            {"dayOfWeek":4, "comment":"#461"}
+            {"dayOfWeek":4, "cardNumberOfCheckin":"#74"},
+            {"dayOfWeek":4, "cardNumberOfCheckin":"#74"},
+            {"dayOfWeek":4, "cardNumberOfCheckin":"#745"},
+            {"dayOfWeek":4, "cardNumberOfCheckin":"#461"}
         ];
         var result = new TimesheetRecordsBuilder().toRecords(logs, "", false);
         expect(result).toNotBe(null);

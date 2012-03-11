@@ -1,6 +1,5 @@
 function TimesheetRecordsBuilder() {
     this.DEFAULT_BILLABLE = false;
-    this.daysOfWeek = [1, 2, 3, 4, 5, 6, 7];
 }
 
 TimesheetRecordsBuilder.prototype = {
