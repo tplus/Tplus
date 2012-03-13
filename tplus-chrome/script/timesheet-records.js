@@ -7,13 +7,13 @@ function TimesheetRecords(logs, code) {
 }
 
 TimesheetRecords.prototype = {
-    filterBy: function(name, endDateOfWeek) {
+    filterBy: function(names, endDateOfWeek) {
         var self = this;
         var result = [];
        _.map(self.logs, function(log){
            var logDate = log.date;
            var description = log.description;
-            if (dateUtil.isInSameWeek(logDate, endDateOfWeek) && self._isCheckedInBy(description, name)) {
+            if (dateUtil.isInSameWeek(logDate, endDateOfWeek) && self._isCheckedInBy(description, names)) {
                 result.push({
                     'dayOfWeek' : dateUtil.getNumberOfDay(logDate),
                     "comment": self._extractStoryOrDefectOrTaskNumber(description),
@@ -24,13 +24,17 @@ TimesheetRecords.prototype = {
         });
         return result;
     },
-    _isCheckedInBy: function(description, name){
-        var result = description.toLowerCase().match(this.logUserNamesPattern);
-        if(!!result){
-            var users = result[1].split("&");
-            return users.indexOf(name.toLowerCase()) != -1;
+    _isCheckedInBy: function(description, names){
+        if(typeof names === "string") {
+            names = [names];
         }
-        return false;
+        names = _.map(names, function(name){ return name.toLowerCase(); });
+        var result = description.toLowerCase().match(this.logUserNamesPattern);
+        if(!result || !result[1]) {
+            return false;
+        }
+        var users = result[1].split("&");
+        return _.intersection(users, names).length > 0;
     },
     _extractStoryOrDefectOrTaskNumber: function(description){
         var result = description.toLowerCase().match(this.cardNumberOfCheckinPattern);

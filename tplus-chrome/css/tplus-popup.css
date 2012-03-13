@@ -1,0 +1,87 @@
+body {
+    font-size: 14px;
+    font-family: Arial,serif;
+    width: 240px;
+}
+
+dl, dt, dd, button, input {
+    margin: 0;
+    padding: 0;
+}
+
+h4 {
+    margin: 10px 0;
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #f60;
+    text-decoration: underline;
+}
+
+dl {
+    margin: 0 0 5px;
+    overflow: hidden;
+}
+
+dt {
+    float: left;
+}
+
+dd {
+    float: right;
+    width: 160px;
+}
+
+button {
+    cursor: pointer;
+}
+
+button, input {
+    display: inline;
+    padding: 3px 3px;
+    border: 1px solid silver;
+}
+
+button:hover {
+    border: 1px solid #f90;
+    background-color: #fc0;
+}
+
+#initials, #repository_url, #project_code {
+    width: 152px;
+}
+
+.date input {
+    width: 112px;
+}
+
+.date button {
+}
+
+#end_date {
+    text-align: center;
+}
+
+#generate_report {
+    float: right;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: Verdara,serif;
+    padding: 2px 8px;
+    border: 1px solid #f90;
+    background-color: #fc0;
+}
+
+#actions {
+    text-align: center;
+}
+
+#actions a {
+    margin-right: 8px;
+    font-size: 13px;
+}

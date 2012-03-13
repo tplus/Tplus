@@ -51,6 +51,14 @@
         }
     }
 
+    function getFullName() {
+        var fullNameSelector = '#content h1',
+            fullNamePattern = /^Add Time Report for (.*)$/,
+            fullNameMatch = $(fullNameSelector).text().match(fullNamePattern),
+            fullName = fullNameMatch && fullNameMatch[1] ? fullNameMatch[1] : null;
+        return fullName;
+    }
+
     function getExistingTimeRecordRowCount() {
         var existingTimeRecordCountSelector = 'table:eq(1) tr';
         return $(existingTimeRecordCountSelector).length - 2;
@@ -177,58 +185,61 @@
         return dateStr + ' ' + monthStr + ' ' + yearStr;
     }
 
-    function onRequest(request) {
-        if (!request || !request.action || !request.params) return;
-        var params = request.params;
-        if (request.action == 'fillWorkRecords') {
-            new TimeSheetRecordsService().load(params, function (records) {
-                setEndDate(formatToTEDateString(new Date(params.endDate)));
-                setExpenseStatus(false);
-                fillTimeReport(records);
-            });
-        } else if (request.action == 'addTimeRecord') {
-            addTimeRecordWithCode(request.params['code']);
-        }
+    function getDefaultEndDate() {
+        var today = new Date(),
+            dayOfWeek = today.getDay() == 0 ? 7 : today.getDay(),
+            endDate = dayOfWeek == 1
+                ? new Date(today.getTime() - MILLI_SECONDS_IN_ONE_DAY)
+                : new Date(today.getTime() + (7 - dayOfWeek) * MILLI_SECONDS_IN_ONE_DAY);
+        return endDate;
     }
 
-    function getSundayOf(date){
-            var MILLI_SECONDS_IN_ONE_DAY = 1000 * 3600 * 24;
-            var obj = new Date(date);
-            var day = obj.getDay();
-            if(!!day){
-                obj = new Date(obj.getTime() + (7-day)*MILLI_SECONDS_IN_ONE_DAY);
+    function isGuessingAlias(searchParams) {
+        return searchParams.aliases instanceof Array && searchParams.aliases.length > 1;
+    }
+
+    function showAliasGuessingMessage(searchParams) {
+        var message = $('<div class="tplus-message"></div>');
+        message.append('<p>T+ thinks that your alias might be: </p>');
+        var innerLinks = [];
+        _.each(searchParams.aliases, function (alias) {
+            innerLinks.push('<a class="tplus-alias" href="javascript:void(0);">' + alias + '</a>');
+        });
+        message.append(innerLinks.join(", "));
+        $(message).delegate('a', 'click', function (e) {
+            $(message).find('a.tplus-alias').removeClass("selected");
+            $(this).addClass("selected");
+            chrome.extension.sendRequest({"fullName":getFullName(), "aliases":$(this).text()});
+        });
+        message.append('<p>So, which are you?</p>');
+        $('.tplus-message').remove();
+        $('body').append(message);
+    }
+
+    function retrieveLogEntriesAndFillTimeReport(searchParams) {
+        new TimeSheetRecordsService().load(searchParams, function (records) {
+            setEndDate(formatToTEDateString(new Date(searchParams.endDate)));
+            setExpenseStatus(false);
+            fillTimeReport(records);
+            if(isGuessingAlias(searchParams)) {
+                showAliasGuessingMessage(searchParams);
             }
-            return new Date(new Date(new Date(obj).toDateString()).getTime())
-        }
+        });
+    }
 
-    function preloadWorkRecords(fullName) {
-        var initialsMap = {"Ruimin Zhang":"ZRM", "Shiwei Zhou":"SW", "Tong Zhang": "ZT" , "Xianjing Zhuo":"XJ", "Yu Zhu":"ZY", "Yu Meng":"MY", "Guangtao Yang":"YGT", "Hongzhang Luo":"HZ", "Yang Jia":"JY", "Stephane Bisson": "LDD", "Hui An":"AH", "Chao Wang":"CC"};
-        if (localStorage['tplus_initials_map']) {
-            var storedMap = JSON.parse(localStorage['tplus_initials_map']);
-            $.extend(initialsMap, storedMap);
-            localStorage['tplus_initials_map'] = JSON.stringify(initialsMap);
-        }
-
-        if (initialsMap[fullName]) {
-            var params = {
-                "initials":initialsMap[fullName],
-                "endDate":getSundayOf(new Date())
-            };
-            new TimeSheetRecordsService().load(params, function (records) {
-                setEndDate(formatToTEDateString(new Date(params.endDate)));
-                setExpenseStatus(false);
-                fillTimeReport(records);
-            });
+    function onRequest(request) {
+        if (!request || !request.action || !request.params) return;
+        var searchParams = request.params;
+        searchParams.endDate = searchParams.endDate || getDefaultEndDate();
+        if (request.action == 'fillWorkRecords') {
+            retrieveLogEntriesAndFillTimeReport(searchParams);
+        } else if (request.action == 'addTimeRecord') {
+            addTimeRecordWithCode(searchParams['code']);
         }
     }
 
     $(function () {
-        var fullNameSelector = '#content h1',
-            fullNamePattern = /^Add Time Report for (.*)$/,
-            fullNameMatch = $(fullNameSelector).text().match(fullNamePattern),
-            fullName = fullNameMatch && fullNameMatch[1] ? fullNameMatch[1] : null;
-
-        preloadWorkRecords(fullName);
+        var fullName = getFullName();
         chrome.extension.onRequest.addListener(onRequest);
         chrome.extension.sendRequest({"fullName":fullName, "aliasProposals":guessAlias(fullName)});
     });

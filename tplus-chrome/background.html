@@ -3,10 +3,39 @@
 <head>
     <script type="text/javascript">
         function onRequest(request, sender) {
-            window['queryOption'] = request;
-            window['tab'] = sender.tab.id;
-            chrome.pageAction.show(sender.tab.id);
+            var tab = sender.tab.id;
+            saveParamsFromTEPage(request, tab);
+            eagerSearch(request,tab);
+            showIconOnTEPage(tab);
         }
+
+        function saveParamsFromTEPage(queryOption, tab) {
+            window['queryOption'] = queryOption;
+            window['tab'] = tab;
+            if(!!queryOption.aliases) {
+                var storedAliasesMap = JSON.parse(localStorage['tplus_initials_map'] || '{}');
+                storedAliasesMap[queryOption.fullName] = queryOption.aliases;
+                localStorage['tplus_initials_map'] = JSON.stringify(storedAliasesMap);
+            }
+        }
+
+        function eagerSearch(queryOption, tab) {
+            var aliases = queryOption.aliases, storedAliasesMapStr = localStorage['tplus_initials_map'];
+            if (!!storedAliasesMapStr) {
+                var storedAliasesMap = JSON.parse(storedAliasesMapStr);
+                aliases = aliases || storedAliasesMap[queryOption.fullName];
+            }
+            aliases = aliases || queryOption.aliasProposals;
+            chrome.tabs.sendRequest(tab, {
+                "action":"fillWorkRecords",
+                "params":{ "aliases":aliases }
+            });
+        }
+
+        function showIconOnTEPage(tab) {
+            chrome.pageAction.show(tab);
+        }
+
         chrome.extension.onRequest.addListener(onRequest);
     </script>
 </head>
