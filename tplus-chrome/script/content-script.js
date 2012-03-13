@@ -181,7 +181,7 @@
         if (!request || !request.action || !request.params) return;
         var params = request.params;
         if (request.action == 'fillWorkRecords') {
-            new TimeSheetRecords().load(params, function (records) {
+            new TimeSheetRecordsService().load(params, function (records) {
                 setEndDate(formatToTEDateString(new Date(params.endDate)));
                 setExpenseStatus(false);
                 fillTimeReport(records);
@@ -214,7 +214,7 @@
                 "initials":initialsMap[fullName],
                 "endDate":getSundayOf(new Date())
             };
-            new TimeSheetRecords().load(params, function (records) {
+            new TimeSheetRecordsService().load(params, function (records) {
                 setEndDate(formatToTEDateString(new Date(params.endDate)));
                 setExpenseStatus(false);
                 fillTimeReport(records);

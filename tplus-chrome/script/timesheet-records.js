@@ -1,51 +1,46 @@
-function TimeSheetRecords() {
-    this.TIGER_REPOSITORY_URL = "10.18.5.147:1911";
-    this.TIGER_ACTIVITY_CODE = 'PWC0001 TIGER MISC';
-    this.TIGER_REPOSITORIES =  [
-                {"url" : "10.18.5.147:1911", "code" : "PWC0001 TIGER MISC"}
-            ];
-    this.DEFAULT_BILLABLE = true;
-    this.logRepository = new LogRepository();
-    this.publicHolidays = new PublicHolidays();
+function TimesheetRecords(logs, code) {
+    this.logs = logs;
+    this.code = code;
+    //this.logDescriptionPattern = /^\[(.*)\]\s*(#r{0,1}\d+)*/;
+    this.logUserNamesPattern = /^\[(.*)\]/;
+    this.cardNumberOfCheckinPattern = /#r{0,1}\d+/;
 }
 
-TimeSheetRecords.prototype = {
-    load:function (criteria, callback) {
+TimesheetRecords.prototype = {
+    filterBy: function(name, endDateOfWeek) {
         var self = this;
-        var holidays = self.publicHolidays.findBy(criteria.endDate);
-        self.getRecords(criteria, function(records){
-            callback(self.merge(records,holidays));
+        var result = [];
+       _.map(self.logs, function(log){
+           var logDate = log.date;
+           var description = log.description;
+            if (dateUtil.isInSameWeek(logDate, endDateOfWeek) && self._isCheckedInBy(description, name)) {
+                result.push({
+                    'dayOfWeek' : dateUtil.getNumberOfDay(logDate),
+                    "comment": self._extractStoryOrDefectOrTaskNumber(description),
+                    'code': self.code,
+                    'billable': true
+                });
+            }
         });
+        return result;
     },
-    getRecords:function (criteria, callback) {
-        var self = this;
-        var repositories =  self.TIGER_REPOSITORIES;
-        if(criteria.repositoryUrl){
-            repositories[0].url = criteria.repositoryUrl;
+    _isCheckedInBy: function(description, name){
+        var result = description.toLowerCase().match(this.logUserNamesPattern);
+        if(!!result){
+            var users = result[1].split("&");
+            return users.indexOf(name.toLowerCase()) != -1;
         }
-        if(criteria.projectCode){
-            repositories[0].code = criteria.projectCode;
-        }
-        var loadLogsFromMultipleRepoFns = [];
-        _.each(repositories, function(repo) {
-            var loadLogsFn = function(callback) {
-                new LogRepository().findBy(repo.url, criteria.initials, criteria.endDate, function(data) {
-                    var logRecords = new TimesheetRecordsBuilder(data, repo.code, self.DEFAULT_BILLABLE).toRecords();
-                    callback(logRecords);
-                })
-            };
-            loadLogsFromMultipleRepoFns.push(loadLogsFn);
-        });
-
-        tplusAsync.parallel(loadLogsFromMultipleRepoFns, function(logs) {
-            callback(new RecordsMerger().merge(logs));
-        });
-
+        return false;
     },
-    merge:function (logs, holidays) {
-        //ToDo remove duplicate records if checked in public holiday that will be ignored.
-        return holidays.concat(logs).sort(function (item1, item2) {
-            return item1.dayOfWeek > item2.dayOfWeek;
-        });
+    _extractStoryOrDefectOrTaskNumber: function(description){
+        var result = description.toLowerCase().match(this.cardNumberOfCheckinPattern);
+        if(!!result){
+            return result[0];
+        }
+        return ""
     }
+
 }
+
+
+
