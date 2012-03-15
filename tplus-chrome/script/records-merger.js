@@ -1,8 +1,13 @@
 function RecordsMerger() {
+    this.workHourInADay = 8;
 }
 
 RecordsMerger.prototype = {
     mergeByCode: function(recordsFromMultipleRepo) {
+        var result = this.DoMerge(recordsFromMultipleRepo);
+        return this.assignWorkingHours(result);
+    },
+    DoMerge: function(recordsFromMultipleRepo) {
         var self = this;
         var recordsGroupByCode = {};
         _.each(recordsFromMultipleRepo, function(entry) {
@@ -11,7 +16,6 @@ RecordsMerger.prototype = {
                 (recordsGroupByCode[key] || (recordsGroupByCode[key] = [])).push(entry);
             }
         });
-
         var result = [];
         _.each(recordsGroupByCode, function(item) {
             var records = self.mergeByDate(_.flatten(item));
@@ -19,7 +23,22 @@ RecordsMerger.prototype = {
         });
         return _.flatten(result);
     },
-
+    assignWorkingHours: function(recordsFromMultiRepos) {
+        var self = this;
+        var recordsGroupByCheckedInDate = _.groupBy(recordsFromMultiRepos, function(records) {
+            return records.dayOfWeek;
+        });
+        var result = [];
+        _.each(recordsGroupByCheckedInDate, function(records) {
+            var numberOfProjects = records.length;
+            var workingHoursPerProject = self.computeHours(self.workHourInADay, numberOfProjects);
+            _.each(records, function(record, index) {
+                records[index].hour = workingHoursPerProject[index].toString();
+            });
+            result.push(records);
+        });
+        return _.flatten(result);
+    },
     mergeByDate: function(logMessages) {
         var self = this;
         var logsGroupByCheckedInDate = _.groupBy(logMessages, function(logMessage) {
@@ -44,6 +63,16 @@ RecordsMerger.prototype = {
             }
         });
         return comments.join(',');
+    },
+    computeHours: function(workHourInADay, numberOfProjects) {
+        var result = [];
+        for (var i = 0; i < numberOfProjects; i++) {
+            var value = Math.floor(workHourInADay / (numberOfProjects - i));
+            workHourInADay = workHourInADay - value;
+            result.push(value);
+        }
+        return result;
+
     }
 
 }

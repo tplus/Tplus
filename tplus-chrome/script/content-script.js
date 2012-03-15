@@ -4,7 +4,6 @@
         DEFAULT_HOLIDAY_CODE = 'TW_TOFF LEAVE PUBLIC_HOLIDAY',
         DEFAULT_ANNUAL_LEAVE_CODE = 'TW_TOFF LEAVE ANNUAL_LV',
         DEFAULT_SICK_LEAVE_CODE = 'TW_TOFF SICK SICK_LV',
-        DEFAULT_DAILY_WORKING_HOURS = 8,
         MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         CODE_TO_COMMENT_MAP = buildCodeToCommentMap();
 
@@ -126,7 +125,7 @@
         setActivity(rowIndex, timeRecord.code);
         setBillableStatus(rowIndex, timeRecord.billable);
         setComment(rowIndex, timeRecord.comment);
-        setWorkingHours(rowIndex, timeRecord.dayOfWeek, DEFAULT_DAILY_WORKING_HOURS);
+        setWorkingHours(rowIndex, timeRecord.dayOfWeek, timeRecord.hour);
     }
 
     function clearTimeRecordFields(rowIndex) {

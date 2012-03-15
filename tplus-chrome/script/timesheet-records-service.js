@@ -2,6 +2,7 @@ function TimeSheetRecordsService() {
     this.TIGER_REPOSITORY_URL = "10.18.5.147:1911";
     this.TIGER_ACTIVITY_CODE = 'PWC0001 TIGER MISC';
     this.TIGER_REPOSITORIES =  [
+                {"url" : "10.18.5.147:1911", "code" : "PWC0001 TIGER MISC"},
                 {"url" : "10.18.5.147:1911", "code" : "PWC0001 TIGER MISC"}
             ];
     this.DEFAULT_BILLABLE = true;
@@ -39,14 +40,15 @@ TimeSheetRecordsService.prototype = {
             loadLogsFromMultipleRepoFns.push(loadLogsFn);
         });
 
-        tplusAsync.parallel(loadLogsFromMultipleRepoFns, function(logs) {
-            callback(self.recordsMerger.mergeByCode(logs));
+        tplusAsync.parallel(loadLogsFromMultipleRepoFns, function(records) {
+            var recordsFromRepos = self.recordsMerger.mergeByCode(records);
+            callback(recordsFromRepos);
         });
 
     },
-    merge:function (logs, holidays) {
+    merge:function (records, holidays) {
         //ToDo remove duplicate records if checked in public holiday that will be ignored.
-        return holidays.concat(logs).sort(function (item1, item2) {
+        return holidays.concat(records).sort(function (item1, item2) {
             return item1.dayOfWeek > item2.dayOfWeek;
         });
     }
