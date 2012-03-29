@@ -1,7 +1,7 @@
 body {
     font-size: 14px;
     font-family: Arial,serif;
-    width: 240px;
+    width: 245px;
 }
 
 dl, dt, dd, button, input {
@@ -34,7 +34,7 @@ dt {
 
 dd {
     float: right;
-    width: 160px;
+    width: 165px;
 }
 
 button {

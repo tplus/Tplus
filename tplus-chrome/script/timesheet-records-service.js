@@ -2,7 +2,6 @@ function TimeSheetRecordsService() {
     this.TIGER_REPOSITORY_URL = "10.18.5.147:1911";
     this.TIGER_ACTIVITY_CODE = 'PWC0001 TIGER MISC';
     this.TIGER_REPOSITORIES =  [
-                {"url" : "10.18.5.147:1911", "code" : "PWC0001 TIGER MISC"},
                 {"url" : "10.18.5.147:1911", "code" : "PWC0001 TIGER MISC"}
             ];
     this.DEFAULT_BILLABLE = true;

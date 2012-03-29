@@ -1,5 +1,5 @@
 function LogRepository() {
-    this.DEFAULT_HG_WEB_API_PATH = "/shortlog/tip?revcount=500"
+    this.DEFAULT_HG_WEB_API_PATH = "/shortlog/tip?revcount=400"
 }
 
 LogRepository.prototype = {
